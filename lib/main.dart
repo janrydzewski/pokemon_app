@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_app/core/utils/context_extensions.dart';
+import 'package:pokemon_app/app_router.dart';
 import 'package:pokemon_app/theme/theme.dart';
 
 void main() {
@@ -11,16 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Pokemon App',
       theme: lightTheme,
-      home: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Text("Pokemon App", style: context.headlineSmall),
-          ),
-        ),
-      ),
+      routerConfig: appRouter,
     );
   }
 }
