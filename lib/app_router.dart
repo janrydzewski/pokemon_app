@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pokemon_app/core/app_routes.dart';
+import 'package:pokemon_app/features/splash/presentation/splash_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutePath.splash,
@@ -8,25 +9,45 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       name: AppRouteName.splash,
       path: AppRoutePath.splash,
-      builder: (context, state) => Scaffold(
-        body: SafeArea(child: Center(child: Text("Splash"))),
-      ),
+      pageBuilder: (ctx, state) =>
+          buildFadePage(context: ctx, state: state, child: const SplashPage()),
     ),
     GoRoute(
       name: AppRouteName.list,
       path: AppRoutePath.list,
-      builder: (context, state) => const Scaffold(
-        body: SafeArea(child: Center(child: Text("List"))),
+      pageBuilder: (ctx, state) => buildFadePage(
+        context: ctx,
+        state: state,
+        child: const Scaffold(
+          body: SafeArea(child: Center(child: Text("List"))),
+        ),
       ),
     ),
     GoRoute(
       name: AppRouteName.detail,
       path: AppRoutePath.detail,
-      builder: (context, state) {
-        return Scaffold(
+      pageBuilder: (ctx, state) => buildFadePage(
+        context: ctx,
+        state: state,
+        child: const Scaffold(
           body: SafeArea(child: Center(child: Text("Details"))),
-        );
-      },
+        ),
+      ),
     ),
   ],
 );
+
+// Custom transition for fade effect
+CustomTransitionPage<T> buildFadePage<T>({
+  required BuildContext context,
+  required GoRouterState state,
+  required Widget child,
+}) {
+  return CustomTransitionPage<T>(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+        FadeTransition(opacity: animation, child: child),
+    transitionDuration: const Duration(milliseconds: 400),
+  );
+}
