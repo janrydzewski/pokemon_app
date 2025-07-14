@@ -17,6 +17,7 @@ class PokemonListScreen extends StatefulWidget {
 class _PokemonListScreenState extends State<PokemonListScreen> {
   final ScrollController _scrollController = ScrollController();
   late final PokemonListCubit _cubit;
+  bool _isLoadingMore = false;
 
   @override
   void initState() {
@@ -34,8 +35,13 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
   }
 
   void _onScroll() {
-    if (_isBottom) {
-      _cubit.loadMorePokemon();
+    if (_isBottom && !_isLoadingMore) {
+      _isLoadingMore = true;
+      _cubit.loadMorePokemon().then((_) {
+        if (mounted) {
+          _isLoadingMore = false;
+        }
+      });
     }
   }
 
@@ -43,7 +49,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
     if (!_scrollController.hasClients) return false;
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
+    return currentScroll >= (maxScroll * 0.85);
   }
 
   String _getPokemonImageUrl(String url) {

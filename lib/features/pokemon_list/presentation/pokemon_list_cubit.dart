@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../core/constants/pagination_constants.dart';
 import '../data/pokemon_models.dart';
 import '../domain/pokemon_repository.dart';
 
@@ -22,23 +23,29 @@ class PokemonListState with _$PokemonListState {
 class PokemonListCubit extends Cubit<PokemonListState> {
   final PokemonRepository _repository;
   List<Pokemon> _allPokemon = [];
-  static const int _pageSize = 20;
-  int _currentOffset = 0;
+  String? _nextPageUrl;
+  int? _totalCount;
+  bool _isCurrentlyLoading = false;
 
   PokemonListCubit(this._repository) : super(const PokemonListState.initial());
-
   Future<void> loadPokemonList() async {
+    if (_isCurrentlyLoading) return;
+
+    _isCurrentlyLoading = true;
     emit(const PokemonListState.loading());
 
     try {
-      _currentOffset = 0;
+      _allPokemon.clear();
+      _nextPageUrl = null;
+
       final response = await _repository.getPokemonList(
-        limit: _pageSize,
-        offset: _currentOffset,
+        limit: PaginationConstants.defaultPageSize,
+        offset: PaginationConstants.defaultOffset,
       );
 
-      _allPokemon = response.results;
-      _currentOffset += _pageSize;
+      _allPokemon = List.from(response.results);
+      _nextPageUrl = response.next;
+      _totalCount = response.count;
 
       emit(
         PokemonListState.loaded(
@@ -50,6 +57,8 @@ class PokemonListCubit extends Cubit<PokemonListState> {
       );
     } catch (e) {
       emit(PokemonListState.error('Failed to load Pokemon list: $e'));
+    } finally {
+      _isCurrentlyLoading = false;
     }
   }
 
@@ -57,44 +66,56 @@ class PokemonListCubit extends Cubit<PokemonListState> {
     final currentState = state;
     if (currentState is! PokemonListLoaded ||
         currentState.isLoadingMore ||
-        !currentState.hasMore) {
+        !currentState.hasMore ||
+        _nextPageUrl == null ||
+        _isCurrentlyLoading) {
       return;
     }
 
+    _isCurrentlyLoading = true;
     emit(currentState.copyWith(isLoadingMore: true));
 
     try {
-      final response = await _repository.getPokemonList(
-        limit: _pageSize,
-        offset: _currentOffset,
-      );
+      final response = await _repository.getPokemonListFromUrl(_nextPageUrl!);
 
-      _allPokemon.addAll(response.results);
-      _currentOffset += _pageSize;
+      final newPokemon = response.results;
+      _allPokemon = [..._allPokemon, ...newPokemon];
+      _nextPageUrl = response.next;
 
       emit(
         PokemonListState.loaded(
           pokemonList: List.from(_allPokemon),
-          totalCount: response.count,
-          hasMore: response.next != null,
+          totalCount: _totalCount ?? response.count,
+          hasMore:
+              response.next != null &&
+              _allPokemon.length < (_totalCount ?? response.count),
           isLoadingMore: false,
         ),
       );
     } catch (e) {
       emit(currentState.copyWith(isLoadingMore: false));
+    } finally {
+      _isCurrentlyLoading = false;
     }
   }
 
   Future<void> refreshPokemonList() async {
+    if (_isCurrentlyLoading) return;
+
+    _isCurrentlyLoading = true;
+
     try {
-      _currentOffset = 0;
+      _allPokemon.clear();
+      _nextPageUrl = null;
+
       final response = await _repository.getPokemonList(
-        limit: _pageSize,
-        offset: _currentOffset,
+        limit: PaginationConstants.defaultPageSize,
+        offset: PaginationConstants.defaultOffset,
       );
 
-      _allPokemon = response.results;
-      _currentOffset += _pageSize;
+      _allPokemon = List.from(response.results);
+      _nextPageUrl = response.next;
+      _totalCount = response.count;
 
       emit(
         PokemonListState.loaded(
@@ -106,6 +127,8 @@ class PokemonListCubit extends Cubit<PokemonListState> {
       );
     } catch (e) {
       emit(PokemonListState.error('Failed to refresh Pokemon list: $e'));
+    } finally {
+      _isCurrentlyLoading = false;
     }
   }
 }
