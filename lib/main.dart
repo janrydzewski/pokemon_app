@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:pokemon_app/app_router.dart';
-import 'package:pokemon_app/theme/theme.dart';
 
-void main() {
+import 'core/di/service_locator.dart';
+import 'theme/theme.dart';
+
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  // Initialize service locator
+  await ServiceLocator.init();
 
   runApp(const MyApp());
 }
