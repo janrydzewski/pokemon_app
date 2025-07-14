@@ -23,6 +23,7 @@ mixin _$PokemonListState {
     required TResult Function() loading,
     required TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )
@@ -35,6 +36,7 @@ mixin _$PokemonListState {
     TResult? Function()? loading,
     TResult? Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
@@ -47,6 +49,7 @@ mixin _$PokemonListState {
     TResult Function()? loading,
     TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
@@ -147,6 +150,7 @@ class _$PokemonListInitialImpl implements PokemonListInitial {
     required TResult Function() loading,
     required TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )
@@ -163,6 +167,7 @@ class _$PokemonListInitialImpl implements PokemonListInitial {
     TResult? Function()? loading,
     TResult? Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
@@ -179,6 +184,7 @@ class _$PokemonListInitialImpl implements PokemonListInitial {
     TResult Function()? loading,
     TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
@@ -281,6 +287,7 @@ class _$PokemonListLoadingImpl implements PokemonListLoading {
     required TResult Function() loading,
     required TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )
@@ -297,6 +304,7 @@ class _$PokemonListLoadingImpl implements PokemonListLoading {
     TResult? Function()? loading,
     TResult? Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
@@ -313,6 +321,7 @@ class _$PokemonListLoadingImpl implements PokemonListLoading {
     TResult Function()? loading,
     TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
@@ -375,7 +384,12 @@ abstract class _$$PokemonListLoadedImplCopyWith<$Res> {
     $Res Function(_$PokemonListLoadedImpl) then,
   ) = __$$PokemonListLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Pokemon> pokemonList, bool hasMore, bool isLoadingMore});
+  $Res call({
+    List<Pokemon> pokemonList,
+    int totalCount,
+    bool hasMore,
+    bool isLoadingMore,
+  });
 }
 
 /// @nodoc
@@ -393,6 +407,7 @@ class __$$PokemonListLoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? pokemonList = null,
+    Object? totalCount = null,
     Object? hasMore = null,
     Object? isLoadingMore = null,
   }) {
@@ -402,6 +417,10 @@ class __$$PokemonListLoadedImplCopyWithImpl<$Res>
             ? _value._pokemonList
             : pokemonList // ignore: cast_nullable_to_non_nullable
                   as List<Pokemon>,
+        totalCount: null == totalCount
+            ? _value.totalCount
+            : totalCount // ignore: cast_nullable_to_non_nullable
+                  as int,
         hasMore: null == hasMore
             ? _value.hasMore
             : hasMore // ignore: cast_nullable_to_non_nullable
@@ -420,6 +439,7 @@ class __$$PokemonListLoadedImplCopyWithImpl<$Res>
 class _$PokemonListLoadedImpl implements PokemonListLoaded {
   const _$PokemonListLoadedImpl({
     required final List<Pokemon> pokemonList,
+    required this.totalCount,
     required this.hasMore,
     required this.isLoadingMore,
   }) : _pokemonList = pokemonList;
@@ -433,13 +453,15 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
   }
 
   @override
+  final int totalCount;
+  @override
   final bool hasMore;
   @override
   final bool isLoadingMore;
 
   @override
   String toString() {
-    return 'PokemonListState.loaded(pokemonList: $pokemonList, hasMore: $hasMore, isLoadingMore: $isLoadingMore)';
+    return 'PokemonListState.loaded(pokemonList: $pokemonList, totalCount: $totalCount, hasMore: $hasMore, isLoadingMore: $isLoadingMore)';
   }
 
   @override
@@ -451,6 +473,8 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
               other._pokemonList,
               _pokemonList,
             ) &&
+            (identical(other.totalCount, totalCount) ||
+                other.totalCount == totalCount) &&
             (identical(other.hasMore, hasMore) || other.hasMore == hasMore) &&
             (identical(other.isLoadingMore, isLoadingMore) ||
                 other.isLoadingMore == isLoadingMore));
@@ -460,6 +484,7 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
   int get hashCode => Object.hash(
     runtimeType,
     const DeepCollectionEquality().hash(_pokemonList),
+    totalCount,
     hasMore,
     isLoadingMore,
   );
@@ -482,13 +507,14 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
     required TResult Function() loading,
     required TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )
     loaded,
     required TResult Function(String message) error,
   }) {
-    return loaded(pokemonList, hasMore, isLoadingMore);
+    return loaded(pokemonList, totalCount, hasMore, isLoadingMore);
   }
 
   @override
@@ -498,13 +524,14 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
     TResult? Function()? loading,
     TResult? Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
     loaded,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(pokemonList, hasMore, isLoadingMore);
+    return loaded?.call(pokemonList, totalCount, hasMore, isLoadingMore);
   }
 
   @override
@@ -514,6 +541,7 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
     TResult Function()? loading,
     TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
@@ -522,7 +550,7 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(pokemonList, hasMore, isLoadingMore);
+      return loaded(pokemonList, totalCount, hasMore, isLoadingMore);
     }
     return orElse();
   }
@@ -568,11 +596,13 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
 abstract class PokemonListLoaded implements PokemonListState {
   const factory PokemonListLoaded({
     required final List<Pokemon> pokemonList,
+    required final int totalCount,
     required final bool hasMore,
     required final bool isLoadingMore,
   }) = _$PokemonListLoadedImpl;
 
   List<Pokemon> get pokemonList;
+  int get totalCount;
   bool get hasMore;
   bool get isLoadingMore;
 
@@ -660,6 +690,7 @@ class _$PokemonListErrorImpl implements PokemonListError {
     required TResult Function() loading,
     required TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )
@@ -676,6 +707,7 @@ class _$PokemonListErrorImpl implements PokemonListError {
     TResult? Function()? loading,
     TResult? Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?
@@ -692,6 +724,7 @@ class _$PokemonListErrorImpl implements PokemonListError {
     TResult Function()? loading,
     TResult Function(
       List<Pokemon> pokemonList,
+      int totalCount,
       bool hasMore,
       bool isLoadingMore,
     )?

@@ -12,6 +12,7 @@ class PokemonListState with _$PokemonListState {
   const factory PokemonListState.loading() = PokemonListLoading;
   const factory PokemonListState.loaded({
     required List<Pokemon> pokemonList,
+    required int totalCount,
     required bool hasMore,
     required bool isLoadingMore,
   }) = PokemonListLoaded;
@@ -42,6 +43,7 @@ class PokemonListCubit extends Cubit<PokemonListState> {
       emit(
         PokemonListState.loaded(
           pokemonList: _allPokemon,
+          totalCount: response.count,
           hasMore: response.next != null,
           isLoadingMore: false,
         ),
@@ -73,6 +75,7 @@ class PokemonListCubit extends Cubit<PokemonListState> {
       emit(
         PokemonListState.loaded(
           pokemonList: List.from(_allPokemon),
+          totalCount: response.count,
           hasMore: response.next != null,
           isLoadingMore: false,
         ),
@@ -96,6 +99,7 @@ class PokemonListCubit extends Cubit<PokemonListState> {
       emit(
         PokemonListState.loaded(
           pokemonList: _allPokemon,
+          totalCount: response.count,
           hasMore: response.next != null,
           isLoadingMore: false,
         ),

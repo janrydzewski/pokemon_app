@@ -73,10 +73,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              const Color(0xFFF8F9FA),
-              const Color(0xFFE9ECEF),
-            ],
+            colors: [const Color(0xFFF8F9FA), const Color(0xFFE9ECEF)],
           ),
         ),
         child: SafeArea(
@@ -141,52 +138,6 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    // Search bar
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
-                            blurRadius: 16,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: const Color(0xFFA0AEC0),
-                            size: 20,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              'Search Pokémon...',
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: const Color(0xFFA0AEC0),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF7FAFC),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Icon(
-                              Icons.tune,
-                              color: const Color(0xFF718096),
-                              size: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -198,8 +149,14 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                     return state.when(
                       initial: () => _buildInitialState(),
                       loading: () => _buildLoadingState(),
-                      loaded: (pokemonList, hasMore, isLoadingMore) => 
-                          _buildLoadedState(pokemonList, hasMore, isLoadingMore),
+                      loaded:
+                          (pokemonList, totalCount, hasMore, isLoadingMore) =>
+                              _buildLoadedState(
+                                pokemonList,
+                                hasMore,
+                                isLoadingMore,
+                                totalCount,
+                              ),
                       error: (message) => _buildErrorState(message),
                     );
                   },
@@ -256,10 +213,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
           const SizedBox(height: 8),
           Text(
             'Pull to refresh and discover Pokémon',
-            style: TextStyle(
-              color: const Color(0xFF718096),
-              fontSize: 16,
-            ),
+            style: TextStyle(color: const Color(0xFF718096), fontSize: 16),
           ),
           const SizedBox(height: 32),
           GestureDetector(
@@ -270,10 +224,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    AppColors.seed,
-                    AppColors.seed.withOpacity(0.8),
-                  ],
+                  colors: [AppColors.seed, AppColors.seed.withOpacity(0.8)],
                 ),
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [
@@ -335,10 +286,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
           const SizedBox(height: 8),
           Text(
             'Please wait while we fetch data',
-            style: TextStyle(
-              color: const Color(0xFF718096),
-              fontSize: 14,
-            ),
+            style: TextStyle(color: const Color(0xFF718096), fontSize: 14),
           ),
         ],
       ),
@@ -349,6 +297,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
     List<Pokemon> pokemonList,
     bool hasMore,
     bool isLoadingMore,
+    int totalCount,
   ) {
     return Column(
       children: [
@@ -374,7 +323,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${pokemonList.length}',
+                    '$totalCount',
                     style: TextStyle(
                       color: const Color(0xFF2D3748),
                       fontSize: 24,
@@ -391,7 +340,10 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.green.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -469,11 +421,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                 ),
               ],
             ),
-            child: Icon(
-              Icons.error_outline,
-              size: 60,
-              color: Colors.red,
-            ),
+            child: Icon(Icons.error_outline, size: 60, color: Colors.red),
           ),
           const SizedBox(height: 32),
           Text(
@@ -489,10 +437,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 48),
             child: Text(
               message,
-              style: TextStyle(
-                color: const Color(0xFF718096),
-                fontSize: 16,
-              ),
+              style: TextStyle(color: const Color(0xFF718096), fontSize: 16),
               textAlign: TextAlign.center,
             ),
           ),
@@ -505,10 +450,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Colors.red,
-                    Colors.red.withOpacity(0.8),
-                  ],
+                  colors: [Colors.red, Colors.red.withOpacity(0.8)],
                 ),
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [
