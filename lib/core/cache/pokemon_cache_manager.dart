@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:pokemon_app/features/pokemon/data/pokemon_models.dart';
+import 'package:pokemon_app/features/pokemon/data/pokemon_type_models.dart';
 
-import '../../features/pokemon_list/data/pokemon_models.dart';
-import '../../features/pokemon_list/data/pokemon_type_models.dart';
 
 /// Local cache manager for Pokemon data using Hive
 class PokemonCacheManager {
@@ -129,6 +129,23 @@ class PokemonCacheManager {
       return PokemonDetails.fromJson(data);
     } catch (e) {
       debugPrint('Error reading cached Pokemon details: $e');
+      // Remove corrupted cache
+      await _pokemonDetailsBox.delete(pokemonId);
+      await _metadataBox.delete('details_$pokemonId');
+      return null;
+    }
+  }
+
+  /// Get cached Pokemon details ignoring TTL (for fallback)
+  Future<PokemonDetails?> getCachedPokemonDetailsFallback(String pokemonId) async {
+    try {
+      final jsonString = _pokemonDetailsBox.get(pokemonId);
+      if (jsonString == null) return null;
+
+      final data = jsonDecode(jsonString) as Map<String, dynamic>;
+      return PokemonDetails.fromJson(data);
+    } catch (e) {
+      debugPrint('Error reading fallback cached Pokemon details: $e');
       // Remove corrupted cache
       await _pokemonDetailsBox.delete(pokemonId);
       await _metadataBox.delete('details_$pokemonId');

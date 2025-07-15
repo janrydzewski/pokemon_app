@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../theme/theme.dart';
+import 'package:pokemon_app/theme/theme.dart';
 
 /// Pokedex header component with power indicator and decorative buttons
 /// Reusable header component following Game Boy Pokedex design

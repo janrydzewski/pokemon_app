@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/theme/theme.dart';
 
-import '../../../../../theme/theme.dart';
 import '../components/animated_game_boy_button.dart';
 
 /// Initial state widget displaying the Game Boy boot screen

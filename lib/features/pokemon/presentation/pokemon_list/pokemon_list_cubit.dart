@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../core/constants/pagination_constants.dart';
-import '../data/pokemon_models.dart';
-import '../data/pokemon_type_models.dart';
-import '../domain/pokemon_repository.dart';
+import '../../../../core/constants/pagination_constants.dart';
+import '../../data/pokemon_models.dart';
+import '../../data/pokemon_type_models.dart';
+import '../../domain/pokemon_repository.dart';
 
 part 'pokemon_list_cubit.freezed.dart';
 

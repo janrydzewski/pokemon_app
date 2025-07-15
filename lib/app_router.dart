@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pokemon_app/core/app_routes.dart';
-import 'package:pokemon_app/features/pokemon_list/presentation/pokemon_list_screen.dart';
+import 'package:pokemon_app/features/pokemon/presentation/pokemon_detail/pokemon_detail_screen.dart';
+import 'package:pokemon_app/features/pokemon/presentation/pokemon_list/pokemon_list_screen.dart';
 import 'package:pokemon_app/features/splash/presentation/splash_page.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -22,13 +23,14 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       name: AppRouteName.detail,
       path: AppRoutePath.detail,
-      pageBuilder: (ctx, state) => buildFadePage(
-        context: ctx,
-        state: state,
-        child: const Scaffold(
-          body: SafeArea(child: Center(child: Text("Details"))),
-        ),
-      ),
+      pageBuilder: (ctx, state) {
+        final pokemonId = state.pathParameters['id'] ?? '1';
+        return buildFadePage(
+          context: ctx,
+          state: state,
+          child: PokemonDetailScreen(pokemonId: pokemonId),
+        );
+      },
     ),
   ],
 );

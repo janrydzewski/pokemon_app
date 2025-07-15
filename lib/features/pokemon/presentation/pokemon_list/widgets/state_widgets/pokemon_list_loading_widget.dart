@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../theme/theme.dart';
+import 'package:pokemon_app/theme/theme.dart';
 
 /// Loading state widget displaying Game Boy style loading screen
 /// Shows animated loading spinner, progress bar and status text

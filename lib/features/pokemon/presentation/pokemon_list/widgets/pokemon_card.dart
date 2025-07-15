@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../theme/theme.dart';
-import '../../data/pokemon_models.dart';
+import '../../../../../theme/theme.dart';
+import '../../../data/pokemon_models.dart';
 
 class PokemonCard extends StatelessWidget {
   final Pokemon pokemon;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/theme/theme.dart';
 
-import '../../../../../theme/theme.dart';
 import 'pokedex_bottom_controls.dart';
 import 'pokedex_header.dart';
 import 'pokedex_screen_wrapper.dart';

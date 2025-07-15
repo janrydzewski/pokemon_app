@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_app/core/utils/context_extensions.dart';
 
-import '../../../../theme/theme.dart';
-import '../../data/pokemon_type_models.dart';
+import '../../../../../theme/theme.dart';
+import '../../../data/pokemon_type_models.dart';
 
 /// Modal dialog for selecting Pokemon type filter
 /// Game Boy/Pokédex inspired design with monospace fonts and green glow

@@ -100,9 +100,36 @@ class PokemonRepositoryImpl implements PokemonRepository {
 
   @override
   Future<PokemonDetails> getPokemonDetails(String nameOrId) async {
-    // For now, just delegate to data source
-    // TODO: Add caching for Pokemon details in next iteration
-    return await _dataSource.getPokemonDetails(nameOrId);
+    try {
+      // 1. Try to get from local cache first
+      final cachedResponse = await _cacheManager.getCachedPokemonDetails(nameOrId);
+      if (cachedResponse != null) {
+        debugPrint('📦 Pokemon details for "$nameOrId" loaded from Hive cache');
+        return cachedResponse;
+      }
+
+      // 2. Fetch from network (with HTTP cache)
+      debugPrint('🌐 Fetching Pokemon details for "$nameOrId" from API');
+      final response = await _dataSource.getPokemonDetails(nameOrId);
+
+      // 3. Cache the response locally
+      await _cacheManager.cachePokemonDetails(
+        pokemonId: nameOrId,
+        details: response,
+      );
+
+      return response;
+    } catch (e) {
+      // 4. Fallback to expired cache if network fails
+      debugPrint('❌ Network error, trying expired cache for Pokemon "$nameOrId"');
+      final expiredCache = await _cacheManager.getCachedPokemonDetailsFallback(nameOrId);
+      if (expiredCache != null) {
+        debugPrint('📦 Using expired cache as fallback for Pokemon "$nameOrId"');
+        return expiredCache;
+      }
+
+      rethrow;
+    }
   }
 
   @override

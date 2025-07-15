@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/theme/theme.dart';
 
-import '../../../../../theme/theme.dart';
 import '../components/animated_game_boy_button.dart';
 
 /// Error state widget displaying Game Boy style error screen

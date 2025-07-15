@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../../theme/theme.dart';
+import '../../../../../../theme/theme.dart';
 
 /// Animated Game Boy style button
 /// Uses implicit animations and haptic feedback for enhanced UX
