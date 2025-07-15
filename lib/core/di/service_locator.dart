@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../features/pokemon_detail/presentation/pokemon_detail_cubit.dart';
 import '../../features/pokemon_list/data/pokemon_data_source.dart';
 import '../../features/pokemon_list/data/pokemon_repository_impl.dart';
 import '../../features/pokemon_list/domain/pokemon_repository.dart';
@@ -40,6 +41,7 @@ class ServiceLocator {
 
     // Cubits
     getIt.registerFactory<PokemonListCubit>(() => PokemonListCubit(getIt()));
+    getIt.registerFactory<PokemonDetailCubit>(() => PokemonDetailCubit(getIt()));
 
     // Clean up expired cache on app start
     await cacheManager.clearExpiredCache();

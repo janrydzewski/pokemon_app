@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/di/service_locator.dart';
-import '../../../theme/theme.dart';
 import '../data/pokemon_models.dart';
 import '../data/pokemon_type_models.dart';
 import 'pokemon_list_cubit.dart';
@@ -70,15 +70,13 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
     return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png';
   }
 
-  /// Handles Pokemon card tap - currently shows snackbar (placeholder for navigation)
+  /// Handles Pokemon card tap - navigates to Pokemon details
   void _onPokemonTap(Pokemon pokemon) {
-    // TODO: Navigate to Pokemon details
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Tapped on ${pokemon.name}'),
-        backgroundColor: AppColors.brightGreen,
-      ),
-    );
+    final uri = Uri.parse(pokemon.url);
+    final segments = uri.pathSegments;
+    final pokemonId = segments[segments.length - 2];
+    
+    context.push('/detail/$pokemonId');
   }
 
   /// Handles filter button tap - opens type filter modal
