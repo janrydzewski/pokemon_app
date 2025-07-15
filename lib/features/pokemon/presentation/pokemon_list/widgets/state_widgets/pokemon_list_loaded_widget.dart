@@ -157,7 +157,6 @@ class _StatusText extends StatelessWidget {
         fontSize: 10,
         fontWeight: FontWeight.w700,
         letterSpacing: 1,
-        fontFamily: 'monospace',
       ),
     );
   }
@@ -177,7 +176,6 @@ class _PokemonCount extends StatelessWidget {
         color: AppColors.brightGreen,
         fontSize: 10,
         fontWeight: FontWeight.w600,
-        fontFamily: 'monospace',
       ),
     );
   }

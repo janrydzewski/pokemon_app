@@ -134,7 +134,6 @@ class _LoadingText extends StatelessWidget {
         fontSize: 16,
         fontWeight: FontWeight.w900,
         letterSpacing: 2,
-        fontFamily: 'monospace',
       ),
     );
   }
@@ -152,7 +151,6 @@ class _LoadingSubtitle extends StatelessWidget {
         fontSize: 10,
         fontWeight: FontWeight.w600,
         letterSpacing: 1,
-        fontFamily: 'monospace',
       ),
     );
   }
@@ -221,7 +219,6 @@ class _LoadingStatus extends StatelessWidget {
         fontSize: 14,
         fontWeight: FontWeight.w700,
         letterSpacing: 2,
-        fontFamily: 'monospace',
       ),
     );
   }

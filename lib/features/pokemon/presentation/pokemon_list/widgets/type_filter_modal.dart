@@ -437,7 +437,7 @@ class _ControlButtons extends StatelessWidget {
           Expanded(
             child: _ControlButton(
               label: 'CONFIRM',
-              color: AppColors.brightGreen,
+              color: Colors.green,
               onTap: onConfirm,
             ),
           ),

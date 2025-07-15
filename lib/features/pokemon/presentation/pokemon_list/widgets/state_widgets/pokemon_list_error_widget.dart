@@ -120,7 +120,6 @@ class _ErrorIcon extends StatelessWidget {
             color: Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.w900,
-            fontFamily: 'monospace',
           ),
         ),
       ),
@@ -141,7 +140,6 @@ class _ErrorTitle extends StatelessWidget {
         fontSize: 16,
         fontWeight: FontWeight.w900,
         letterSpacing: 2,
-        fontFamily: 'monospace',
       ),
     );
   }
@@ -169,7 +167,7 @@ class _ErrorMessage extends StatelessWidget {
           color: AppColors.brightRed,
           fontSize: 8,
           fontWeight: FontWeight.w600,
-          fontFamily: 'monospace',
+
           height: 1.2,
         ),
         textAlign: TextAlign.center,
@@ -250,7 +248,6 @@ class _SystemHaltMessage extends StatelessWidget {
         fontSize: 10,
         fontWeight: FontWeight.w700,
         letterSpacing: 1,
-        fontFamily: 'monospace',
       ),
     );
   }

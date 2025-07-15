@@ -171,7 +171,6 @@ class _ButtonContent extends StatelessWidget {
               fontSize: 12,
               fontWeight: FontWeight.w700,
               letterSpacing: 1,
-              fontFamily: 'monospace',
             ),
           ),
         ],
