@@ -47,7 +47,7 @@ class PokemonCard extends StatelessWidget {
             margin: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: AppColors.highContrastDark, // Much darker background
+              color: AppColors.highContrastDark,
               border: Border.all(color: AppColors.brightGreen, width: 1),
             ),
             child: Stack(
@@ -123,8 +123,7 @@ class PokemonCard extends StatelessWidget {
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: AppColors
-                                .contrastCardBackground, // Even darker background
+                            color: AppColors.contrastCardBackground,
                             borderRadius: BorderRadius.circular(4),
                             border: Border.all(
                               color: AppColors.brightGreen,
