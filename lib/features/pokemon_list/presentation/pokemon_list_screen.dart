@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pokemon_app/core/utils/context_extensions.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../theme/theme.dart';
@@ -16,22 +15,24 @@ class PokemonListScreen extends StatefulWidget {
   State<PokemonListScreen> createState() => _PokemonListScreenState();
 }
 
-class _PokemonListScreenState extends State<PokemonListScreen> {
+class _PokemonListScreenState extends State<PokemonListScreen>
+    with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   late final PokemonListCubit _cubit;
   bool _isLoadingMore = false;
+  AnimationController? _animationController;
 
   @override
   void initState() {
     super.initState();
     _cubit = getIt<PokemonListCubit>();
     _scrollController.addListener(_onScroll);
-    _cubit.loadPokemonList();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _animationController?.dispose();
     _cubit.close();
     super.dispose();
   }
@@ -66,7 +67,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Tapped on ${pokemon.name}'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: AppColors.brightGreen,
       ),
     );
   }
@@ -75,48 +76,339 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [const Color(0xFFF8F9FA), const Color(0xFFE9ECEF)],
-            ),
+      backgroundColor: AppColors.retroBackground,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.retroBackground,
+              AppColors.retroBackground.withOpacity(0.8),
+              Colors.black,
+            ],
           ),
-          child: RefreshIndicator(
-            onRefresh: () async {
-              await _cubit.refreshPokemonList();
-            },
-            backgroundColor: Colors.white,
-            child: CustomScrollView(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                // Main content area
-                BlocBuilder<PokemonListCubit, PokemonListState>(
-                  bloc: _cubit,
-                  builder: (context, state) {
-                    return state.when(
-                      initial: () =>
-                          SliverFillRemaining(child: _buildInitialState()),
-                      loading: () =>
-                          SliverFillRemaining(child: _buildLoadingState()),
-                      loaded:
-                          (pokemonList, totalCount, hasMore, isLoadingMore) =>
-                              _buildLoadedSlivers(
-                                pokemonList,
-                                hasMore,
-                                isLoadingMore,
-                                totalCount,
-                              ),
-                      error: (message) =>
-                          SliverFillRemaining(child: _buildErrorState(message)),
-                    );
-                  },
+        ),
+        child: SafeArea(
+          child: Container(
+            margin: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.pokedexRed,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.black, width: 3),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.8),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
                 ),
               ],
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.gameBoyBezel,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.black.withOpacity(0.5),
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                children: [
+                  // Game Boy header with buttons
+                  Container(
+                    height: 80,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(14),
+                        topRight: Radius.circular(14),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          AppColors.pokedexRed,
+                          AppColors.pokedexRed.withOpacity(0.9),
+                        ],
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        // Left side - Power indicator
+                        Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: AppColors.screenGreen,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 1),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.screenGreen,
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'POWER',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          'POKÉDEX',
+                          style: TextStyle(
+                            color: AppColors.pokedexGold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black,
+                                offset: Offset(1, 1),
+                                blurRadius: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        // Right side buttons
+                        Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: AppColors.buttonBlue,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: AppColors.buttonYellow,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Main screen area
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.gameBoyScreenDark,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.black, width: 3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.6),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(9),
+                        child: Stack(
+                          children: [
+                            // Scanlines overlay
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: List.generate(40, (index) {
+                                      return index.isEven
+                                          ? Colors.transparent
+                                          : Colors.black.withOpacity(0.1);
+                                    }),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // Screen content
+                            RefreshIndicator(
+                              onRefresh: () async {
+                                await _cubit.refreshPokemonList();
+                              },
+                              color: AppColors.brightGreen,
+                              backgroundColor: AppColors.highContrastDark,
+                              child: CustomScrollView(
+                                controller: _scrollController,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                slivers: [
+                                  BlocBuilder<
+                                    PokemonListCubit,
+                                    PokemonListState
+                                  >(
+                                    bloc: _cubit,
+                                    builder: (context, state) {
+                                      return state.when(
+                                        initial: () => SliverFillRemaining(
+                                          child: _buildInitialState(),
+                                        ),
+                                        loading: () => SliverFillRemaining(
+                                          child: _buildLoadingState(),
+                                        ),
+                                        loaded:
+                                            (
+                                              pokemonList,
+                                              totalCount,
+                                              hasMore,
+                                              isLoadingMore,
+                                            ) => _buildLoadedSlivers(
+                                              pokemonList,
+                                              hasMore,
+                                              isLoadingMore,
+                                              totalCount,
+                                            ),
+
+                                        error: (message) => SliverFillRemaining(
+                                          child: _buildErrorState(message),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Bottom controls
+                  Container(
+                    height: 60,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(14),
+                        bottomRight: Radius.circular(14),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          AppColors.gameBoyBezel,
+                          AppColors.gameBoyBezel.withOpacity(0.8),
+                        ],
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // D-pad representation
+                        Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.black.withOpacity(0.6),
+                            size: 20,
+                          ),
+                        ),
+
+                        // Center area
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              'NINTENDO POKÉDEX',
+                              style: TextStyle(
+                                color: Colors.black.withOpacity(0.7),
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Action buttons
+                        Row(
+                          children: [
+                            Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: AppColors.pokedexRed.withOpacity(0.8),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'B',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: AppColors.pokedexRed.withOpacity(0.8),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'A',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -125,125 +417,371 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
   }
 
   Widget _buildInitialState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppColors.primaryYellow.withOpacity(0.2),
-                  AppColors.primaryYellow.withOpacity(0.1),
-                ],
-              ),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primaryYellow.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Icon(
-              Icons.catching_pokemon,
-              size: 60,
-              color: AppColors.primaryYellow,
-            ),
-          ),
-          const SizedBox(height: 32),
-          Text(
-            'Welcome to Pokédex',
-            style: TextStyle(
-              color: const Color(0xFF2D3748),
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Pull to refresh and discover Pokémon',
-            style: TextStyle(color: const Color(0xFF718096), fontSize: 16),
-          ),
-          const SizedBox(height: 32),
-          GestureDetector(
-            onTap: () => _cubit.loadPokemonList(),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.highContrastDark,
+            AppColors.contrastCardBackground,
+          ],
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Game Boy style Pokédex boot screen
+            Container(
+              width: 200,
+              height: 120,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppColors.seed, AppColors.seed.withOpacity(0.8)],
-                ),
-                borderRadius: BorderRadius.circular(25),
+                color: AppColors.contrastCardBackground,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.brightGreen, width: 3),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.seed.withOpacity(0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+                    color: AppColors.brightGreen.withOpacity(0.3),
+                    blurRadius: 10,
                   ),
                 ],
               ),
-              child: Text(
-                'Start Exploring',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+              child: Stack(
+                children: [
+                  // Screen content
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Pokéball pixel art style
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: AppColors.brightGreen,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: 20,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.brightGreen.withOpacity(
+                                      0.7,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.contrastCardBackground,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'POKÉDX',
+                          style: TextStyle(
+                            color: AppColors.brightGreen,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Ver 1.0',
+                          style: TextStyle(
+                            color: AppColors.brightGreen.withOpacity(0.7),
+                            fontSize: 8,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Corner pixels for retro effect
+                  Positioned(
+                    top: 4,
+                    left: 4,
+                    child: Container(
+                      width: 2,
+                      height: 2,
+                      color: AppColors.brightGreen.withOpacity(0.5),
+                    ),
+                  ),
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: Container(
+                      width: 2,
+                      height: 2,
+                      color: AppColors.brightGreen.withOpacity(0.5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40),
+
+            // Boot text
+            Text(
+              'GAME BOY',
+              style: TextStyle(
+                color: AppColors.brightGreen,
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 3,
+                fontFamily: 'monospace',
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'POKÉDEX CARTRIDGE',
+              style: TextStyle(
+                color: AppColors.brightGreen.withOpacity(0.8),
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.5,
+                fontFamily: 'monospace',
+              ),
+            ),
+            const SizedBox(height: 40),
+
+            // Start button
+            GestureDetector(
+              onTap: () => _cubit.loadPokemonList(),
+              child: Container(
+                width: 160,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.contrastCardBackground,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppColors.brightGreen, width: 2),
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.play_arrow,
+                        color: AppColors.brightGreen,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'PRESS START',
+                        style: TextStyle(
+                          color: AppColors.brightGreen,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+
+            // Blinking cursor
+            AnimatedBuilder(
+              animation: _animationController ??= AnimationController(
+                duration: const Duration(milliseconds: 800),
+                vsync: this,
+              )..repeat(reverse: true),
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationController!.value,
+                  child: Container(
+                    width: 8,
+                    height: 12,
+                    color: AppColors.gameBoyGreen,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildLoadingState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppColors.seed.withOpacity(0.2),
-                  AppColors.seed.withOpacity(0.1),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.highContrastDark,
+            AppColors.contrastCardBackground,
+          ],
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Game Boy style loading screen
+            Container(
+              width: 240,
+              height: 180,
+              decoration: BoxDecoration(
+                color: AppColors.contrastCardBackground,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.brightGreen, width: 3),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.brightGreen.withOpacity(0.3),
+                    blurRadius: 12,
+                  ),
                 ],
               ),
-              shape: BoxShape.circle,
+              child: Stack(
+                children: [
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Loading spinner Game Boy style
+                        Container(
+                          width: 60,
+                          height: 60,
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.brightGreen,
+                                    strokeWidth: 3,
+                                    backgroundColor: AppColors.brightGreen
+                                        .withOpacity(0.2),
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Icon(
+                                  Icons.catching_pokemon,
+                                  size: 20,
+                                  color: AppColors.brightGreen,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Loading text
+                        Text(
+                          'LOADING...',
+                          style: TextStyle(
+                            color: AppColors.brightGreen,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'ACCESSING POKÉDEX DATA',
+                          style: TextStyle(
+                            color: AppColors.brightGreen.withOpacity(0.7),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Progress bar Game Boy style
+                        Container(
+                          width: 160,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: AppColors.contrastCardBackground,
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                              color: AppColors.brightGreen,
+                              width: 1,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(3),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.transparent,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.brightGreen,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Corner decorations
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Row(
+                      children: List.generate(
+                        3,
+                        (index) => Container(
+                          width: 4,
+                          height: 4,
+                          margin: const EdgeInsets.only(right: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.brightGreen.withOpacity(0.5),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: CircularProgressIndicator(
-              color: AppColors.seed,
-              strokeWidth: 3,
+            const SizedBox(height: 40),
+
+            // Loading status
+            Text(
+              'PLEASE WAIT...',
+              style: TextStyle(
+                color: AppColors.brightGreen,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 2,
+                fontFamily: 'monospace',
+              ),
             ),
-          ),
-          const SizedBox(height: 32),
-          Text(
-            'Loading Pokémon...',
-            style: TextStyle(
-              color: const Color(0xFF2D3748),
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Please wait while we fetch data',
-            style: TextStyle(color: const Color(0xFF718096), fontSize: 14),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -256,159 +794,115 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
   ) {
     return SliverMainAxisGroup(
       slivers: [
-        SliverAppBar.medium(
-          expandedHeight: 110,
-          surfaceTintColor: Colors.white,
-          title: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'Pokédex',
-                  style: context.titleLarge.copyWith(
-                    color: AppColors.darkText,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22,
+        // Header
+        SliverToBoxAdapter(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                // Status bar
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
                   ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.seed.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.menu, color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-          flexibleSpace: FlexibleSpaceBar(
-            background: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [AppColors.seed, AppColors.seed.withOpacity(0.8)],
+                  decoration: BoxDecoration(
+                    color: AppColors.highContrastDark,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: AppColors.brightGreen, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.brightGreen.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 0),
+                      ),
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.seed.withOpacity(0.3),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  children: [
-                    // Background pattern circles
-                    Positioned(
-                      top: -30,
-                      right: -30,
-                      child: Container(
-                        width: 80,
-                        height: 80,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: AppColors.brightGreen,
                           shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: -20,
-                      left: -20,
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.05),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    // Main content
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Icon(
-                                Icons.catching_pokemon,
-                                size: 32,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Pokédex',
-                                    style: context.titleLarge.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 22,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Discover and catch them all!',
-                                    style: context.bodyMedium.copyWith(
-                                      color: Colors.white.withOpacity(0.9),
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.menu, color: Colors.white),
-                              ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.brightGreen,
+                              blurRadius: 6,
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      Text(
+                        'POKÉDEX ONLINE',
+                        style: TextStyle(
+                          color: AppColors.brightGreen,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${pokemonList.length} ENTRIES',
+                        style: TextStyle(
+                          color: AppColors.brightGreen,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      GestureDetector(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Filter feature coming soon!'),
+                              backgroundColor: AppColors.brightGreen,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: AppColors.brightGreen.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                              color: AppColors.brightGreen,
+                              width: 2,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.tune,
+                            color: AppColors.brightGreen,
+                            size: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
 
-        // Pokemon grid sliver
+        // Pokemon grid
         SliverPadding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 1.2,
+              childAspectRatio: 0.85,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
             ),
             delegate: SliverChildBuilderDelegate((context, index) {
               if (index >= pokemonList.length) {
-                // Loading cards at the bottom
                 return const PokemonLoadingCard();
               }
 
@@ -421,87 +915,190 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
             }, childCount: pokemonList.length + (isLoadingMore ? 2 : 0)),
           ),
         ),
+
+        // Bottom padding
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
       ],
     );
   }
 
   Widget _buildErrorState(String message) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.red.withOpacity(0.2),
-                  Colors.red.withOpacity(0.1),
-                ],
-              ),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.red.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Icon(Icons.error_outline, size: 60, color: Colors.red),
-          ),
-          const SizedBox(height: 32),
-          Text(
-            'Something went wrong',
-            style: TextStyle(
-              color: const Color(0xFF2D3748),
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48),
-            child: Text(
-              message,
-              style: TextStyle(color: const Color(0xFF718096), fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 32),
-          GestureDetector(
-            onTap: () => _cubit.loadPokemonList(),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.highContrastDark,
+            AppColors.contrastCardBackground,
+          ],
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Game Boy style error screen
+            Container(
+              width: 240,
+              height: 160,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.red, Colors.red.withOpacity(0.8)],
-                ),
-                borderRadius: BorderRadius.circular(25),
+                color: AppColors.contrastCardBackground,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.brightRed, width: 3),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.red.withOpacity(0.3),
+                    color: AppColors.brightRed.withOpacity(0.3),
                     blurRadius: 12,
-                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
-              child: Text(
-                'Try Again',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+              child: Stack(
+                children: [
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Error icon
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: AppColors.brightRed,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '!',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Error message
+                        Text(
+                          'ERROR',
+                          style: TextStyle(
+                            color: AppColors.brightRed,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 180,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.contrastCardBackground,
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                              color: AppColors.brightRed.withOpacity(0.5),
+                            ),
+                          ),
+                          child: Text(
+                            message.toUpperCase(),
+                            style: TextStyle(
+                              color: AppColors.brightRed,
+                              fontSize: 8,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'monospace',
+                              height: 1.2,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Blinking error indicators
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: AppColors.brightRed,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: AppColors.brightRed,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40),
+
+            // Retry button
+            GestureDetector(
+              onTap: () => _cubit.loadPokemonList(),
+              child: Container(
+                width: 160,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.contrastCardBackground,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppColors.brightRed, width: 2),
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.refresh, color: AppColors.brightRed, size: 16),
+                      const SizedBox(width: 8),
+                      Text(
+                        'TRY AGAIN',
+                        style: TextStyle(
+                          color: AppColors.brightRed,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+
+            // System message
+            Text(
+              'SYSTEM HALT',
+              style: TextStyle(
+                color: AppColors.brightRed.withOpacity(0.6),
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1,
+                fontFamily: 'monospace',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
