@@ -258,72 +258,138 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
       slivers: [
         SliverAppBar.medium(
           expandedHeight: 110,
-          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
           title: Row(
             children: [
               Expanded(
-                child: Text('$totalCount Pokémon', style: context.titleLarge),
+                child: Text(
+                  'Pokédex',
+                  style: context.titleLarge.copyWith(
+                    color: AppColors.darkText,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 22,
+                  ),
+                ),
               ),
-              IconButton.filled(onPressed: () {}, icon: Icon(Icons.menu)),
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.seed.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.menu, color: Colors.white),
+                ),
+              ),
             ],
           ),
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
               color: Colors.white,
-              padding: const EdgeInsets.only(top: 8, left: 4, right: 4),
-              child: Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.white, Colors.blue.shade50],
-                    ),
+              padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [AppColors.seed, AppColors.seed.withOpacity(0.8)],
                   ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.catching_pokemon,
-                        size: 48,
-                        color: Colors.blue,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.seed.withOpacity(0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  children: [
+                    // Background pattern circles
+                    Positioned(
+                      top: -30,
+                      right: -30,
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
+                    ),
+                    Positioned(
+                      bottom: -20,
+                      left: -20,
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.05),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                    // Main content
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
                           children: [
-                            Text(
-                              'Pokédex',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue.shade800,
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Icons.catching_pokemon,
+                                size: 32,
+                                color: Colors.white,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Discover and catch them all!',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'Pokédex',
+                                    style: context.titleLarge.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Discover and catch them all!',
+                                    style: context.bodyMedium.copyWith(
+                                      color: Colors.white.withOpacity(0.9),
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.menu, color: Colors.white),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      IconButton.filled(
-                        onPressed: () {},
-                        icon: Icon(Icons.menu),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
