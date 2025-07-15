@@ -136,6 +136,23 @@ class PokemonCacheManager {
     }
   }
 
+  /// Get cached Pokemon details ignoring TTL (for fallback)
+  Future<PokemonDetails?> getCachedPokemonDetailsFallback(String pokemonId) async {
+    try {
+      final jsonString = _pokemonDetailsBox.get(pokemonId);
+      if (jsonString == null) return null;
+
+      final data = jsonDecode(jsonString) as Map<String, dynamic>;
+      return PokemonDetails.fromJson(data);
+    } catch (e) {
+      debugPrint('Error reading fallback cached Pokemon details: $e');
+      // Remove corrupted cache
+      await _pokemonDetailsBox.delete(pokemonId);
+      await _metadataBox.delete('details_$pokemonId');
+      return null;
+    }
+  }
+
   /// Cache Pokemon types list
   Future<void> cachePokemonTypes({
     required PokemonTypeListResponse response,
