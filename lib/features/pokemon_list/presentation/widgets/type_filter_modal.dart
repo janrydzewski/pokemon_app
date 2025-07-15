@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/core/utils/context_extensions.dart';
 
 import '../../../../theme/theme.dart';
 import '../../data/pokemon_type_models.dart';
@@ -140,11 +141,10 @@ class _FilterHeader extends StatelessWidget {
           // Title
           Text(
             'TYPE FILTER',
-            style: TextStyle(
+            style: context.titleLarge.copyWith(
               color: Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.w900,
-              fontFamily: 'monospace',
               letterSpacing: 2,
             ),
           ),
@@ -188,11 +188,10 @@ class _ScreenHeader extends StatelessWidget {
         children: [
           Text(
             'SELECTED TYPE:',
-            style: TextStyle(
+            style: context.labelSmall.copyWith(
               color: AppColors.brightGreen,
               fontSize: 10,
               fontWeight: FontWeight.w600,
-              fontFamily: 'monospace',
               letterSpacing: 1,
             ),
           ),
@@ -201,13 +200,12 @@ class _ScreenHeader extends StatelessWidget {
             selectedType != null
                 ? PokemonTypes.getTypeDisplayName(selectedType!.name)
                 : 'NONE',
-            style: TextStyle(
+            style: context.bodyMedium.copyWith(
               color: selectedType != null
                   ? AppColors.brightGreen
                   : AppColors.brightGreen.withOpacity(0.5),
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              fontFamily: 'monospace',
               letterSpacing: 1.5,
             ),
           ),
@@ -378,11 +376,10 @@ class _TypeButtonState extends State<_TypeButton>
               child: Center(
                 child: Text(
                   PokemonTypes.getTypeDisplayName(widget.type.name),
-                  style: TextStyle(
+                  style: context.bodySmall.copyWith(
                     color: widget.isSelected ? Colors.black : _getTypeColor,
                     fontSize: 8,
                     fontWeight: FontWeight.w700,
-                    fontFamily: 'monospace',
                     letterSpacing: 0.5,
                   ),
                   textAlign: TextAlign.center,
@@ -513,11 +510,10 @@ class _ControlButtonState extends State<_ControlButton>
               child: Center(
                 child: Text(
                   widget.label,
-                  style: TextStyle(
+                  style: context.labelLarge.copyWith(
                     color: widget.color,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    fontFamily: 'monospace',
                     letterSpacing: 1,
                   ),
                 ),
