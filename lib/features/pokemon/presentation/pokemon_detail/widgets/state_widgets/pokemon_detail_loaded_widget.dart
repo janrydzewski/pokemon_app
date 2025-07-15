@@ -72,7 +72,7 @@ class _PokemonHeader extends StatelessWidget {
         border: Border.all(color: AppColors.brightGreen, width: 2),
         boxShadow: [
           BoxShadow(
-            color: AppColors.brightGreen.withOpacity(0.3),
+            color: AppColors.brightGreen.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -113,7 +113,7 @@ class _PokemonHeader extends StatelessWidget {
                       Text(
                         'IMAGE NOT FOUND',
                         style: context.bodySmall.copyWith(
-                          color: AppColors.brightGreen.withOpacity(0.6),
+                          color: AppColors.brightGreen.withValues(alpha: 0.6),
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                         ),
@@ -149,7 +149,7 @@ class _PokemonHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.brightGreen.withOpacity(0.2),
+              color: AppColors.brightGreen.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(4),
               border: Border.all(color: AppColors.brightGreen, width: 1),
             ),

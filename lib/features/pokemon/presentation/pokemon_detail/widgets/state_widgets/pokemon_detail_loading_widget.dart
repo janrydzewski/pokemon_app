@@ -60,7 +60,7 @@ class _PokemonDetailLoadingWidgetState extends State<PokemonDetailLoadingWidget>
           border: Border.all(color: AppColors.brightGreen, width: 2),
           boxShadow: [
             BoxShadow(
-              color: AppColors.brightGreen.withOpacity(0.3),
+              color: AppColors.brightGreen.withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 0),
             ),
@@ -121,7 +121,7 @@ class _PokemonDetailLoadingWidgetState extends State<PokemonDetailLoadingWidget>
                       width: 6,
                       height: 6,
                       decoration: BoxDecoration(
-                        color: AppColors.brightGreen.withOpacity(opacity),
+                        color: AppColors.brightGreen.withValues(alpha: opacity),
                         shape: BoxShape.circle,
                       ),
                     );
@@ -135,7 +135,7 @@ class _PokemonDetailLoadingWidgetState extends State<PokemonDetailLoadingWidget>
             Text(
               'PLEASE WAIT',
               style: context.bodySmall.copyWith(
-                color: AppColors.brightGreen.withOpacity(0.6),
+                color: AppColors.brightGreen.withValues(alpha: 0.6),
                 fontSize: 10,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 1,

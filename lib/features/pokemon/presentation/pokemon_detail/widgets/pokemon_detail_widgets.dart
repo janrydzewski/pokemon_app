@@ -64,7 +64,7 @@ class PokemonTypeBadge extends StatelessWidget {
         border: Border.all(color: Colors.white, width: 2),
         boxShadow: [
           BoxShadow(
-            color: _getTypeColor.withOpacity(0.3),
+            color: _getTypeColor.withValues(alpha: 0.3),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -183,7 +183,7 @@ class PokemonStatBar extends StatelessWidget {
                     color: _getStatColor,
                     boxShadow: [
                       BoxShadow(
-                        color: _getStatColor.withOpacity(0.5),
+                        color: _getStatColor.withValues(alpha: 0.5),
                         blurRadius: 4,
                       ),
                     ],
@@ -280,7 +280,7 @@ class _InfoItem extends StatelessWidget {
           Text(
             label,
             style: context.bodySmall.copyWith(
-              color: AppColors.brightGreen.withOpacity(0.7),
+              color: AppColors.brightGreen.withValues(alpha: 0.7),
               fontSize: 8,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.5,

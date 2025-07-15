@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_app/theme/theme.dart';
 
-
 /// Bottom controls component simulating Game Boy controls
 /// Includes D-pad, Nintendo branding, and action buttons (A/B)
 class PokedexBottomControls extends StatelessWidget {
@@ -22,7 +21,7 @@ class PokedexBottomControls extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             AppColors.gameBoyBezel,
-            AppColors.gameBoyBezel.withOpacity(0.8),
+            AppColors.gameBoyBezel.withValues(alpha: 0.8),
           ],
         ),
       ),
@@ -53,10 +52,14 @@ class _DPadControl extends StatelessWidget {
       width: 32,
       height: 32,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.3),
+        color: Colors.black.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(6),
       ),
-      child: Icon(Icons.add, color: Colors.black.withOpacity(0.6), size: 20),
+      child: Icon(
+        Icons.add,
+        color: Colors.black.withValues(alpha: 0.6),
+        size: 20,
+      ),
     );
   }
 }
@@ -71,7 +74,7 @@ class _NintendoBranding extends StatelessWidget {
       child: Text(
         'NINTENDO POKÉDX',
         style: TextStyle(
-          color: Colors.black.withOpacity(0.7),
+          color: Colors.black.withValues(alpha: 0.7),
           fontSize: 10,
           fontWeight: FontWeight.bold,
           letterSpacing: 1,
@@ -109,7 +112,7 @@ class _ActionButton extends StatelessWidget {
       width: 24,
       height: 24,
       decoration: BoxDecoration(
-        color: AppColors.pokedexRed.withOpacity(0.8),
+        color: AppColors.pokedexRed.withValues(alpha: 0.8),
         shape: BoxShape.circle,
         border: Border.all(color: Colors.black, width: 1),
       ),

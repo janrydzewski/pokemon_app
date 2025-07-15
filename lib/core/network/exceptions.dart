@@ -24,8 +24,8 @@ class TimeoutException extends NetworkException {
 }
 
 class ServerException extends NetworkException {
-  const ServerException({String? details})
-    : super(message: 'Server error', statusCode: 500, details: details);
+  const ServerException({super.details})
+    : super(message: 'Server error', statusCode: 500);
 }
 
 class UnauthorizedException extends NetworkException {
@@ -34,11 +34,11 @@ class UnauthorizedException extends NetworkException {
 }
 
 class NotFoundException extends NetworkException {
-  const NotFoundException({String? details})
-    : super(message: 'Resource not found', statusCode: 404, details: details);
+  const NotFoundException({super.details})
+    : super(message: 'Resource not found', statusCode: 404);
 }
 
 class BadRequestException extends NetworkException {
-  const BadRequestException({String? details})
-    : super(message: 'Bad request', statusCode: 400, details: details);
+  const BadRequestException({super.details})
+    : super(message: 'Bad request', statusCode: 400);
 }

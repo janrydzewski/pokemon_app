@@ -38,10 +38,13 @@ class _PokemonLoadingCardState extends State<PokemonLoadingCard>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: AppColors.pokedexSilver,
-        border: Border.all(color: Colors.black.withOpacity(0.8), width: 3),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.8),
+          width: 3,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             blurRadius: 10,
             offset: const Offset(3, 3),
           ),
@@ -67,7 +70,7 @@ class _PokemonLoadingCardState extends State<PokemonLoadingCard>
                     colors: List.generate(20, (index) {
                       return index.isEven
                           ? Colors.transparent
-                          : Colors.black.withOpacity(0.1);
+                          : Colors.black.withValues(alpha: 0.1);
                     }),
                   ),
                 ),
@@ -90,8 +93,8 @@ class _PokemonLoadingCardState extends State<PokemonLoadingCard>
                             width: 40,
                             height: 12,
                             decoration: BoxDecoration(
-                              color: AppColors.brightGreen.withOpacity(
-                                _animation.value,
+                              color: AppColors.brightGreen.withValues(
+                                alpha: _animation.value,
                               ),
                               borderRadius: BorderRadius.circular(2),
                             ),
@@ -105,8 +108,8 @@ class _PokemonLoadingCardState extends State<PokemonLoadingCard>
                             width: 6,
                             height: 6,
                             decoration: BoxDecoration(
-                              color: AppColors.brightGreen.withOpacity(
-                                _animation.value,
+                              color: AppColors.brightGreen.withValues(
+                                alpha: _animation.value,
                               ),
                               shape: BoxShape.circle,
                             ),
@@ -140,8 +143,8 @@ class _PokemonLoadingCardState extends State<PokemonLoadingCard>
                                   width: 24,
                                   height: 24,
                                   decoration: BoxDecoration(
-                                    color: AppColors.brightGreen.withOpacity(
-                                      _animation.value,
+                                    color: AppColors.brightGreen.withValues(
+                                      alpha: _animation.value,
                                     ),
                                     borderRadius: BorderRadius.circular(4),
                                   ),
@@ -168,8 +171,9 @@ class _PokemonLoadingCardState extends State<PokemonLoadingCard>
                                       width: 3,
                                       height: 3,
                                       decoration: BoxDecoration(
-                                        color: AppColors.brightGreen
-                                            .withOpacity(animValue),
+                                        color: AppColors.brightGreen.withValues(
+                                          alpha: animValue,
+                                        ),
                                         shape: BoxShape.circle,
                                       ),
                                     );
@@ -206,8 +210,8 @@ class _PokemonLoadingCardState extends State<PokemonLoadingCard>
                               return Container(
                                 height: 2,
                                 decoration: BoxDecoration(
-                                  color: AppColors.brightGreen.withOpacity(
-                                    _animation.value,
+                                  color: AppColors.brightGreen.withValues(
+                                    alpha: _animation.value,
                                   ),
                                   borderRadius: BorderRadius.circular(1),
                                 ),
@@ -223,8 +227,8 @@ class _PokemonLoadingCardState extends State<PokemonLoadingCard>
                               width: 12,
                               height: 6,
                               decoration: BoxDecoration(
-                                color: AppColors.brightGreen.withOpacity(
-                                  _animation.value * 0.8,
+                                color: AppColors.brightGreen.withValues(
+                                  alpha: _animation.value * 0.8,
                                 ),
                                 borderRadius: BorderRadius.circular(1),
                               ),

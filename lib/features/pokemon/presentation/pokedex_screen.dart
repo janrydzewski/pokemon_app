@@ -223,7 +223,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
   /// Builds the header for details view with back button
   Widget _buildDetailsHeader() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 4),
       child: Row(
         children: [
           GestureDetector(
@@ -231,7 +231,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: AppColors.brightRed.withOpacity(0.2),
+                color: AppColors.brightRed.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(color: AppColors.brightRed, width: 2),
               ),

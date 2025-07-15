@@ -67,7 +67,7 @@ class _ErrorScreen extends StatelessWidget {
         border: Border.all(color: AppColors.brightRed, width: 3),
         boxShadow: [
           BoxShadow(
-            color: AppColors.brightRed.withOpacity(0.3),
+            color: AppColors.brightRed.withValues(alpha: 0.3),
             blurRadius: 12,
           ),
         ],
@@ -159,7 +159,7 @@ class _ErrorMessage extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.contrastCardBackground,
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: AppColors.brightRed.withOpacity(0.5)),
+        border: Border.all(color: AppColors.brightRed.withValues(alpha: 0.5)),
       ),
       child: Text(
         message.toUpperCase(),
@@ -244,7 +244,7 @@ class _SystemHaltMessage extends StatelessWidget {
     return Text(
       'SYSTEM HALT',
       style: TextStyle(
-        color: AppColors.brightRed.withOpacity(0.6),
+        color: AppColors.brightRed.withValues(alpha: 0.6),
         fontSize: 10,
         fontWeight: FontWeight.w700,
         letterSpacing: 1,

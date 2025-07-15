@@ -19,7 +19,10 @@ class PokedexHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.pokedexRed, AppColors.pokedexRed.withOpacity(0.9)],
+          colors: [
+            AppColors.pokedexRed,
+            AppColors.pokedexRed.withValues(alpha: 0.9),
+          ],
         ),
       ),
       child: Row(

@@ -18,7 +18,7 @@ class PokedexScreenWrapper extends StatelessWidget {
         border: Border.all(color: Colors.black, width: 3),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -47,7 +47,7 @@ class _ScanlinesOverlay extends StatelessWidget {
               colors: List.generate(40, (index) {
                 return index.isEven
                     ? Colors.transparent
-                    : Colors.black.withOpacity(0.1);
+                    : Colors.black.withValues(alpha: 0.1);
               }),
             ),
           ),

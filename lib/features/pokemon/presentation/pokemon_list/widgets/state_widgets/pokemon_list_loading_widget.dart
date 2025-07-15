@@ -51,7 +51,7 @@ class _LoadingScreen extends StatelessWidget {
         border: Border.all(color: AppColors.brightGreen, width: 3),
         boxShadow: [
           BoxShadow(
-            color: AppColors.brightGreen.withOpacity(0.3),
+            color: AppColors.brightGreen.withValues(alpha: 0.3),
             blurRadius: 12,
           ),
         ],
@@ -93,7 +93,7 @@ class _LoadingSpinner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 60,
       height: 60,
       child: Stack(
@@ -105,7 +105,7 @@ class _LoadingSpinner extends StatelessWidget {
               child: CircularProgressIndicator(
                 color: AppColors.brightGreen,
                 strokeWidth: 3,
-                backgroundColor: AppColors.brightGreen.withOpacity(0.2),
+                backgroundColor: AppColors.brightGreen.withValues(alpha: 0.2),
               ),
             ),
           ),
@@ -147,7 +147,7 @@ class _LoadingSubtitle extends StatelessWidget {
     return Text(
       'ACCESSING POKÉDEX DATA',
       style: TextStyle(
-        color: AppColors.brightGreen.withOpacity(0.7),
+        color: AppColors.brightGreen.withValues(alpha: 0.7),
         fontSize: 10,
         fontWeight: FontWeight.w600,
         letterSpacing: 1,
@@ -196,7 +196,7 @@ class _LoadingScreenDecorations extends StatelessWidget {
             height: 4,
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
-              color: AppColors.brightGreen.withOpacity(0.5),
+              color: AppColors.brightGreen.withValues(alpha: 0.5),
               shape: BoxShape.circle,
             ),
           ),

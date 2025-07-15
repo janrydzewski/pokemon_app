@@ -80,7 +80,7 @@ class _BootScreen extends StatelessWidget {
         border: Border.all(color: AppColors.brightGreen, width: 3),
         boxShadow: [
           BoxShadow(
-            color: AppColors.brightGreen.withOpacity(0.3),
+            color: AppColors.brightGreen.withValues(alpha: 0.3),
             blurRadius: 10,
           ),
         ],
@@ -112,7 +112,7 @@ class _BootScreen extends StatelessWidget {
                 Text(
                   'Ver 1.0',
                   style: TextStyle(
-                    color: AppColors.brightGreen.withOpacity(0.7),
+                    color: AppColors.brightGreen.withValues(alpha: 0.7),
                     fontSize: 8,
                   ),
                 ),
@@ -150,7 +150,7 @@ class _PixelPokeball extends StatelessWidget {
             height: 20,
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.brightGreen.withOpacity(0.7),
+                color: AppColors.brightGreen.withValues(alpha: 0.7),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
@@ -189,7 +189,7 @@ class _CornerPixels extends StatelessWidget {
           child: Container(
             width: 2,
             height: 2,
-            color: AppColors.brightGreen.withOpacity(0.5),
+            color: AppColors.brightGreen.withValues(alpha: 0.5),
           ),
         ),
         Positioned(
@@ -198,7 +198,7 @@ class _CornerPixels extends StatelessWidget {
           child: Container(
             width: 2,
             height: 2,
-            color: AppColors.brightGreen.withOpacity(0.5),
+            color: AppColors.brightGreen.withValues(alpha: 0.5),
           ),
         ),
       ],
@@ -226,7 +226,7 @@ class _GameBoyBranding extends StatelessWidget {
         Text(
           'POKÉDEX CARTRIDGE',
           style: TextStyle(
-            color: AppColors.brightGreen.withOpacity(0.8),
+            color: AppColors.brightGreen.withValues(alpha: 0.8),
             fontSize: 12,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.5,

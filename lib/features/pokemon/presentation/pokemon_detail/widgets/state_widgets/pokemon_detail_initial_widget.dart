@@ -39,7 +39,7 @@ class PokemonDetailInitialWidget extends StatelessWidget {
             Text(
               'READY TO SCAN',
               style: context.bodySmall.copyWith(
-                color: AppColors.brightGreen.withOpacity(0.7),
+                color: AppColors.brightGreen.withValues(alpha: 0.7),
                 fontSize: 10,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 1,

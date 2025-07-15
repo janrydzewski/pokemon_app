@@ -59,7 +59,7 @@ class _TypeFilterModalState extends State<TypeFilterModal> {
           border: Border.all(color: Colors.black, width: 4),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.8),
+              color: Colors.black.withValues(alpha: 0.8),
               blurRadius: 20,
               offset: const Offset(5, 5),
             ),
@@ -203,7 +203,7 @@ class _ScreenHeader extends StatelessWidget {
             style: context.bodyMedium.copyWith(
               color: selectedType != null
                   ? AppColors.brightGreen
-                  : AppColors.brightGreen.withOpacity(0.5),
+                  : AppColors.brightGreen.withValues(alpha: 0.5),
               fontSize: 14,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.5,
@@ -366,7 +366,7 @@ class _TypeButtonState extends State<_TypeButton>
                 boxShadow: widget.isSelected
                     ? [
                         BoxShadow(
-                          color: _getTypeColor.withOpacity(0.5),
+                          color: _getTypeColor.withValues(alpha: 0.5),
                           blurRadius: 8,
                           offset: const Offset(0, 0),
                         ),
@@ -503,7 +503,7 @@ class _ControlButtonState extends State<_ControlButton>
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: widget.color.withOpacity(0.2),
+                color: widget.color.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(color: widget.color, width: 2),
               ),

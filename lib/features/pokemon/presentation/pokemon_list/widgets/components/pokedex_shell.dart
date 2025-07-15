@@ -25,7 +25,7 @@ class PokedexShell extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               AppColors.retroBackground,
-              AppColors.retroBackground.withOpacity(0.8),
+              AppColors.retroBackground.withValues(alpha: 0.8),
               Colors.black,
             ],
           ),
@@ -51,7 +51,7 @@ class _PokedexCasing extends StatelessWidget {
         border: Border.all(color: Colors.black, width: 3),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.8),
+            color: Colors.black.withValues(alpha: 0.8),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -74,7 +74,10 @@ class _PokedexBezel extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.gameBoyBezel,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black.withOpacity(0.5), width: 2),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.5),
+          width: 2,
+        ),
       ),
       child: Column(
         children: [

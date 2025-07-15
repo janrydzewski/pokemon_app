@@ -93,7 +93,7 @@ class _StatusHeader extends StatelessWidget {
           border: Border.all(color: AppColors.brightGreen, width: 3),
           boxShadow: [
             BoxShadow(
-              color: AppColors.brightGreen.withOpacity(0.3),
+              color: AppColors.brightGreen.withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 0),
             ),
@@ -195,7 +195,7 @@ class _FilterButton extends StatelessWidget {
         width: 20,
         height: 20,
         decoration: BoxDecoration(
-          color: AppColors.brightGreen.withOpacity(0.2),
+          color: AppColors.brightGreen.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(4),
           border: Border.all(color: AppColors.brightGreen, width: 2),
         ),

@@ -32,7 +32,7 @@ class PokemonDetailErrorWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.brightRed.withOpacity(0.2),
+                color: AppColors.brightRed.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.brightRed, width: 2),
               ),
@@ -69,7 +69,7 @@ class PokemonDetailErrorWidget extends StatelessWidget {
               child: Text(
                 message,
                 style: context.bodySmall.copyWith(
-                  color: AppColors.brightRed.withOpacity(0.8),
+                  color: AppColors.brightRed.withValues(alpha: 0.8),
                   fontSize: 10,
                   fontWeight: FontWeight.w500,
                 ),
@@ -91,7 +91,7 @@ class PokemonDetailErrorWidget extends StatelessWidget {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.brightRed.withOpacity(0.1),
+                    color: AppColors.brightRed.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                     border: Border.all(color: AppColors.brightRed, width: 2),
                   ),

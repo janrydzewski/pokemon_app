@@ -106,13 +106,17 @@ class _AnimatedGameBoyButtonState extends State<AnimatedGameBoyButton>
                 color: backgroundColor,
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
-                  color: borderColor.withOpacity(widget.enabled ? 1.0 : 0.5),
+                  color: borderColor.withValues(
+                    alpha: widget.enabled ? 1.0 : 0.5,
+                  ),
                   width: 2,
                 ),
                 boxShadow: widget.enabled
                     ? [
                         BoxShadow(
-                          color: borderColor.withOpacity(_glowAnimation.value),
+                          color: borderColor.withValues(
+                            alpha: _glowAnimation.value,
+                          ),
                           blurRadius: _isPressed ? 8 : 4,
                           offset: const Offset(0, 0),
                         ),
@@ -149,8 +153,8 @@ class _ButtonContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = (textColor ?? AppColors.brightGreen).withOpacity(
-      enabled ? 1.0 : 0.5,
+    final color = (textColor ?? AppColors.brightGreen).withValues(
+      alpha: enabled ? 1.0 : 0.5,
     );
 
     return Center(

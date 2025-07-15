@@ -72,6 +72,7 @@ class PokemonStat with _$PokemonStat {
     stat: StatInfo.fromJson(json['stat'] as Map<String, dynamic>),
   );
 
+  @override
   Map<String, dynamic> toJson() => {
     'base_stat': baseStat,
     'effort': effort,
@@ -108,6 +109,7 @@ class PokemonSprites with _$PokemonSprites {
         : null,
   );
 
+  @override
   Map<String, dynamic> toJson() => {
     'front_default': frontDefault,
     'front_shiny': frontShiny,
@@ -131,6 +133,7 @@ class PokemonSpritesOther with _$PokemonSpritesOther {
             : null,
       );
 
+  @override
   Map<String, dynamic> toJson() => {
     'official-artwork': officialArtwork?.toJson(),
   };
@@ -143,5 +146,6 @@ class OfficialArtwork with _$OfficialArtwork {
   factory OfficialArtwork.fromJson(Map<String, dynamic> json) =>
       OfficialArtwork(frontDefault: json['front_default'] as String?);
 
+  @override
   Map<String, dynamic> toJson() => {'front_default': frontDefault};
 }
