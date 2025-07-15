@@ -48,7 +48,6 @@ class PokemonTypeSlot with _$PokemonTypeSlot {
       _$PokemonTypeSlotFromJson(json);
 }
 
-/// Predefiniowane typy Pokemonów zgodnie z API
 class PokemonTypes {
   static const List<PokemonTypeBasic> predefinedTypes = [
     PokemonTypeBasic(name: 'normal', url: 'https://pokeapi.co/api/v2/type/1/'),

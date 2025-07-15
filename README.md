@@ -1,16 +1,32 @@
-# pokemon_app
+# Pokemon App
 
-A new Flutter project.
+Flutter-based Pokedex application using PokeAPI with offline caching.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Paginated Pokemon list
+- Type-based filtering
+- Detailed Pokemon stats and images
+- Offline support with local caching
 
-A few resources to get you started if this is your first Flutter project:
+## Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter** - Cross-platform framework
+- **BLoC** - State management
+- **Dio** - HTTP client with caching
+- **Hive** - Local NoSQL database
+- **Freezed** - Immutable models
+- **GoRouter** - Navigation
+- **GetIt** - Dependency injection
+- **Cached Network Image** - Image caching
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Setup
+
+```bash
+flutter pub get
+flutter run
+```
+
+## Architecture
+
+Data flows from PokeAPI through Dio HTTP client to Hive cache, managed by BLoC state management with repository pattern for data abstraction.
