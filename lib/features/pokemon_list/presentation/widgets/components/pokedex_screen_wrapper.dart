@@ -39,16 +39,18 @@ class _ScanlinesOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: List.generate(40, (index) {
-              return index.isEven
-                  ? Colors.transparent
-                  : Colors.black.withOpacity(0.1);
-            }),
+      child: IgnorePointer(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: List.generate(40, (index) {
+                return index.isEven
+                    ? Colors.transparent
+                    : Colors.black.withOpacity(0.1);
+              }),
+            ),
           ),
         ),
       ),
