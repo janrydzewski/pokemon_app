@@ -7,6 +7,31 @@ class AppColors {
   static const Color primaryYellow = Color(0xFFFFCB05);
   static const Color darkText = Color(0xFF2D2D2D);
   static const Color lightGray = Color(0xFFF2F2F2);
+
+  // Pokédex themed colors
+  static const Color pokedexRed = Color(0xFFDC143C);
+  static const Color pokedexBlue = Color(0xFF1E3A8A);
+  static const Color pokedexSilver = Color(0xFFC0C0C0);
+  static const Color pokedexGold = Color(0xFFFFD700);
+  static const Color screenGreen = Color(0xFF00FF41);
+  static const Color screenDark = Color(0xFF0B1426);
+  static const Color buttonBlue = Color(0xFF1E40AF);
+  static const Color buttonYellow = Color(0xFFFBBF24);
+
+  // Game Boy inspired colors
+  static const Color gameBoyGreen = Color(0xFF9BBB0C);
+  static const Color gameBoyDarkGreen = Color(0xFF8BAC0F);
+  static const Color gameBoyLightGreen = Color(0xFFC7D323);
+  static const Color gameBoyScreenDark = Color(0xFF306230);
+  static const Color gameBoyBezel = Color(0xFF8B956D);
+  static const Color retroBackground = Color(0xFF1A1A1A);
+
+  // High contrast colors for cards and panels
+  static const Color highContrastDark = Color(0xFF0D1117);
+  static const Color contrastCardBackground = Color(0xFF161B22);
+  static const Color brightGreen = Color(0xFF00FF41);
+  static const Color brightRed = Color(0xFFFF4444);
+  static const Color brightBlue = Color(0xFF00BFFF);
 }
 
 final ThemeData lightTheme = ThemeData(
@@ -66,7 +91,6 @@ final ThemeData lightTheme = ThemeData(
     ),
   ),
   appBarTheme: AppBarTheme(
-    backgroundColor: AppColors.seed,
     foregroundColor: Colors.white,
     elevation: 2,
     centerTitle: true,
