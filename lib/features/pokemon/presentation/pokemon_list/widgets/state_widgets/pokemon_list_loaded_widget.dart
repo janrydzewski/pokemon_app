@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../theme/theme.dart';
-import '../../../data/pokemon_models.dart';
-import '../../../data/pokemon_type_models.dart';
+import '../../../../../../theme/theme.dart';
+import '../../../../data/pokemon_models.dart';
+import '../../../../data/pokemon_type_models.dart';
 import '../pokemon_card.dart';
 import '../pokemon_loading_card.dart';
 

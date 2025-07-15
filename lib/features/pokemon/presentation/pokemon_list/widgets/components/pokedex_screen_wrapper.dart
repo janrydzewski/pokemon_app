@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../theme/theme.dart';
+import 'package:pokemon_app/theme/theme.dart';
 
 /// Screen wrapper component that provides the Game Boy-style screen container
 /// with border, scanlines overlay, and proper styling

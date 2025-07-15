@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pokemon_app/core/app_routes.dart';
-import 'package:pokemon_app/features/pokemon_detail/presentation/pokemon_detail_screen.dart';
-import 'package:pokemon_app/features/pokemon_list/presentation/pokemon_list_screen.dart';
+import 'package:pokemon_app/features/pokemon/presentation/pokemon_detail/pokemon_detail_screen.dart';
+import 'package:pokemon_app/features/pokemon/presentation/pokemon_list/pokemon_list_screen.dart';
 import 'package:pokemon_app/features/splash/presentation/splash_page.dart';
 
 final GoRouter appRouter = GoRouter(

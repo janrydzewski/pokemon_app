@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/theme/theme.dart';
 
-import '../../../../../theme/theme.dart';
 
 /// Bottom controls component simulating Game Boy controls
 /// Includes D-pad, Nintendo branding, and action buttons (A/B)

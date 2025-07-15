@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:pokemon_app/features/pokemon/data/pokemon_models.dart';
+import 'package:pokemon_app/features/pokemon/data/pokemon_type_models.dart';
 
-import '../../features/pokemon_list/data/pokemon_models.dart';
-import '../../features/pokemon_list/data/pokemon_type_models.dart';
 
 /// Local cache manager for Pokemon data using Hive
 class PokemonCacheManager {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../theme/theme.dart';
+import '../../../../../theme/theme.dart';
 
 class PokemonLoadingCard extends StatefulWidget {
   const PokemonLoadingCard({super.key});
