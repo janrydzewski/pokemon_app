@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'exceptions.dart';
 
@@ -12,8 +15,10 @@ class NetworkClient {
   static const Duration _receiveTimeout = Duration(seconds: 30);
 
   late final Dio _dio;
+  CacheOptions? _cacheOptions;
 
-  NetworkClient() {
+  NetworkClient({CacheOptions? cacheOptions}) {
+    _cacheOptions = cacheOptions;
     _dio = Dio(
       BaseOptions(
         baseUrl: _baseUrl,
@@ -29,7 +34,31 @@ class NetworkClient {
     _setupInterceptors();
   }
 
+  static Future<CacheOptions> createCacheOptions() async {
+    final dir = await getTemporaryDirectory();
+    final cacheStore = HiveCacheStore(
+      dir.path,
+      hiveBoxName: 'pokemon_http_cache',
+    );
+
+    return CacheOptions(
+      store: cacheStore,
+      policy: CachePolicy.request,
+      hitCacheOnErrorExcept: [401, 403],
+      maxStale: const Duration(days: 7),
+      priority: CachePriority.normal,
+      cipher: null,
+      keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+      allowPostMethod: false,
+    );
+  }
+
   void _setupInterceptors() {
+    // Add cache interceptor first if available
+    if (_cacheOptions != null) {
+      _dio.interceptors.add(DioCacheInterceptor(options: _cacheOptions!));
+    }
+
     _dio.interceptors.add(
       LogInterceptor(
         requestBody: true,
