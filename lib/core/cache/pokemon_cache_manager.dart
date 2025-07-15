@@ -5,7 +5,6 @@ import 'package:hive/hive.dart';
 import 'package:pokemon_app/features/pokemon/data/pokemon_models.dart';
 import 'package:pokemon_app/features/pokemon/data/pokemon_type_models.dart';
 
-
 /// Local cache manager for Pokemon data using Hive
 class PokemonCacheManager {
   static const String _pokemonListBoxName = 'pokemon_list_cache';
@@ -14,7 +13,7 @@ class PokemonCacheManager {
   static const String _metadataBoxName = 'cache_metadata';
 
   // Cache duration settings
-  static const Duration _listCacheDuration = Duration(hours: 1);
+  static const Duration _listCacheDuration = Duration(hours: 2);
   static const Duration _detailsCacheDuration = Duration(hours: 6);
   static const Duration _typesCacheDuration = Duration(
     hours: 24,
@@ -137,7 +136,9 @@ class PokemonCacheManager {
   }
 
   /// Get cached Pokemon details ignoring TTL (for fallback)
-  Future<PokemonDetails?> getCachedPokemonDetailsFallback(String pokemonId) async {
+  Future<PokemonDetails?> getCachedPokemonDetailsFallback(
+    String pokemonId,
+  ) async {
     try {
       final jsonString = _pokemonDetailsBox.get(pokemonId);
       if (jsonString == null) return null;
