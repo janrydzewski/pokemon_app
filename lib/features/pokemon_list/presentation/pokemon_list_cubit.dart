@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../core/constants/pagination_constants.dart';
 import '../data/pokemon_models.dart';
+import '../data/pokemon_type_models.dart';
 import '../domain/pokemon_repository.dart';
 
 part 'pokemon_list_cubit.freezed.dart';
@@ -16,6 +17,7 @@ class PokemonListState with _$PokemonListState {
     required int totalCount,
     required bool hasMore,
     required bool isLoadingMore,
+    PokemonTypeBasic? selectedType,
   }) = PokemonListLoaded;
   const factory PokemonListState.error(String message) = PokemonListError;
 }
@@ -26,6 +28,7 @@ class PokemonListCubit extends Cubit<PokemonListState> {
   String? _nextPageUrl;
   int? _totalCount;
   bool _isCurrentlyLoading = false;
+  PokemonTypeBasic? _selectedType;
 
   PokemonListCubit(this._repository) : super(const PokemonListState.initial());
   Future<void> loadPokemonList() async {
@@ -37,6 +40,7 @@ class PokemonListCubit extends Cubit<PokemonListState> {
     try {
       _allPokemon.clear();
       _nextPageUrl = null;
+      _selectedType = null;
 
       final response = await _repository.getPokemonList(
         limit: PaginationConstants.defaultPageSize,
@@ -53,6 +57,7 @@ class PokemonListCubit extends Cubit<PokemonListState> {
           totalCount: response.count,
           hasMore: response.next != null,
           isLoadingMore: false,
+          selectedType: _selectedType,
         ),
       );
     } catch (e) {
@@ -60,6 +65,48 @@ class PokemonListCubit extends Cubit<PokemonListState> {
     } finally {
       _isCurrentlyLoading = false;
     }
+  }
+
+  Future<void> loadPokemonByType(PokemonTypeBasic type) async {
+    if (_isCurrentlyLoading) return;
+
+    _isCurrentlyLoading = true;
+    emit(const PokemonListState.loading());
+
+    try {
+      _allPokemon.clear();
+      _nextPageUrl = null;
+      _selectedType = type;
+
+      final typeDetails = await _repository.getPokemonsByType(type.name);
+
+      // Convert PokemonTypeDetails to list of Pokemon
+      final pokemonList = typeDetails.pokemon
+          .map((slot) => slot.pokemon)
+          .toList();
+
+      _allPokemon = pokemonList;
+      _totalCount = pokemonList.length;
+
+      emit(
+        PokemonListState.loaded(
+          pokemonList: _allPokemon,
+          totalCount: pokemonList.length,
+          hasMore: false, // Type filtering doesn't support pagination
+          isLoadingMore: false,
+          selectedType: _selectedType,
+        ),
+      );
+    } catch (e) {
+      emit(PokemonListState.error('Failed to load Pokemon by type: $e'));
+    } finally {
+      _isCurrentlyLoading = false;
+    }
+  }
+
+  Future<void> clearFilter() async {
+    _selectedType = null;
+    await loadPokemonList();
   }
 
   Future<void> loadMorePokemon() async {

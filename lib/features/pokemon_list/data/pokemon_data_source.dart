@@ -1,6 +1,7 @@
 import '../../../core/constants/pagination_constants.dart';
 import '../../../core/network/network_client.dart';
 import 'pokemon_models.dart';
+import 'pokemon_type_models.dart';
 
 class PokemonDataSource {
   final NetworkClient _networkClient;
@@ -38,5 +39,22 @@ class PokemonDataSource {
     );
 
     return PokemonDetails.fromJson(response);
+  }
+
+  Future<PokemonTypeListResponse> getPokemonTypes() async {
+    final response = await _networkClient.get<Map<String, dynamic>>(
+      endpoint: '/type',
+      queryParameters: {'limit': 21},
+    );
+
+    return PokemonTypeListResponse.fromJson(response);
+  }
+
+  Future<PokemonTypeDetails> getPokemonsByType(String typeNameOrId) async {
+    final response = await _networkClient.get<Map<String, dynamic>>(
+      endpoint: '/type/$typeNameOrId',
+    );
+
+    return PokemonTypeDetails.fromJson(response);
   }
 }

@@ -26,6 +26,7 @@ mixin _$PokemonListState {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )
     loaded,
     required TResult Function(String message) error,
@@ -39,6 +40,7 @@ mixin _$PokemonListState {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult? Function(String message)? error,
@@ -52,6 +54,7 @@ mixin _$PokemonListState {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult Function(String message)? error,
@@ -153,6 +156,7 @@ class _$PokemonListInitialImpl implements PokemonListInitial {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )
     loaded,
     required TResult Function(String message) error,
@@ -170,6 +174,7 @@ class _$PokemonListInitialImpl implements PokemonListInitial {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult? Function(String message)? error,
@@ -187,6 +192,7 @@ class _$PokemonListInitialImpl implements PokemonListInitial {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult Function(String message)? error,
@@ -290,6 +296,7 @@ class _$PokemonListLoadingImpl implements PokemonListLoading {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )
     loaded,
     required TResult Function(String message) error,
@@ -307,6 +314,7 @@ class _$PokemonListLoadingImpl implements PokemonListLoading {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult? Function(String message)? error,
@@ -324,6 +332,7 @@ class _$PokemonListLoadingImpl implements PokemonListLoading {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult Function(String message)? error,
@@ -389,7 +398,10 @@ abstract class _$$PokemonListLoadedImplCopyWith<$Res> {
     int totalCount,
     bool hasMore,
     bool isLoadingMore,
+    PokemonTypeBasic? selectedType,
   });
+
+  $PokemonTypeBasicCopyWith<$Res>? get selectedType;
 }
 
 /// @nodoc
@@ -410,6 +422,7 @@ class __$$PokemonListLoadedImplCopyWithImpl<$Res>
     Object? totalCount = null,
     Object? hasMore = null,
     Object? isLoadingMore = null,
+    Object? selectedType = freezed,
   }) {
     return _then(
       _$PokemonListLoadedImpl(
@@ -429,8 +442,26 @@ class __$$PokemonListLoadedImplCopyWithImpl<$Res>
             ? _value.isLoadingMore
             : isLoadingMore // ignore: cast_nullable_to_non_nullable
                   as bool,
+        selectedType: freezed == selectedType
+            ? _value.selectedType
+            : selectedType // ignore: cast_nullable_to_non_nullable
+                  as PokemonTypeBasic?,
       ),
     );
+  }
+
+  /// Create a copy of PokemonListState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PokemonTypeBasicCopyWith<$Res>? get selectedType {
+    if (_value.selectedType == null) {
+      return null;
+    }
+
+    return $PokemonTypeBasicCopyWith<$Res>(_value.selectedType!, (value) {
+      return _then(_value.copyWith(selectedType: value));
+    });
   }
 }
 
@@ -442,6 +473,7 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
     required this.totalCount,
     required this.hasMore,
     required this.isLoadingMore,
+    this.selectedType,
   }) : _pokemonList = pokemonList;
 
   final List<Pokemon> _pokemonList;
@@ -458,10 +490,12 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
   final bool hasMore;
   @override
   final bool isLoadingMore;
+  @override
+  final PokemonTypeBasic? selectedType;
 
   @override
   String toString() {
-    return 'PokemonListState.loaded(pokemonList: $pokemonList, totalCount: $totalCount, hasMore: $hasMore, isLoadingMore: $isLoadingMore)';
+    return 'PokemonListState.loaded(pokemonList: $pokemonList, totalCount: $totalCount, hasMore: $hasMore, isLoadingMore: $isLoadingMore, selectedType: $selectedType)';
   }
 
   @override
@@ -477,7 +511,9 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
                 other.totalCount == totalCount) &&
             (identical(other.hasMore, hasMore) || other.hasMore == hasMore) &&
             (identical(other.isLoadingMore, isLoadingMore) ||
-                other.isLoadingMore == isLoadingMore));
+                other.isLoadingMore == isLoadingMore) &&
+            (identical(other.selectedType, selectedType) ||
+                other.selectedType == selectedType));
   }
 
   @override
@@ -487,6 +523,7 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
     totalCount,
     hasMore,
     isLoadingMore,
+    selectedType,
   );
 
   /// Create a copy of PokemonListState
@@ -510,11 +547,18 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )
     loaded,
     required TResult Function(String message) error,
   }) {
-    return loaded(pokemonList, totalCount, hasMore, isLoadingMore);
+    return loaded(
+      pokemonList,
+      totalCount,
+      hasMore,
+      isLoadingMore,
+      selectedType,
+    );
   }
 
   @override
@@ -527,11 +571,18 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(pokemonList, totalCount, hasMore, isLoadingMore);
+    return loaded?.call(
+      pokemonList,
+      totalCount,
+      hasMore,
+      isLoadingMore,
+      selectedType,
+    );
   }
 
   @override
@@ -544,13 +595,20 @@ class _$PokemonListLoadedImpl implements PokemonListLoaded {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(pokemonList, totalCount, hasMore, isLoadingMore);
+      return loaded(
+        pokemonList,
+        totalCount,
+        hasMore,
+        isLoadingMore,
+        selectedType,
+      );
     }
     return orElse();
   }
@@ -599,12 +657,14 @@ abstract class PokemonListLoaded implements PokemonListState {
     required final int totalCount,
     required final bool hasMore,
     required final bool isLoadingMore,
+    final PokemonTypeBasic? selectedType,
   }) = _$PokemonListLoadedImpl;
 
   List<Pokemon> get pokemonList;
   int get totalCount;
   bool get hasMore;
   bool get isLoadingMore;
+  PokemonTypeBasic? get selectedType;
 
   /// Create a copy of PokemonListState
   /// with the given fields replaced by the non-null parameter values.
@@ -693,6 +753,7 @@ class _$PokemonListErrorImpl implements PokemonListError {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )
     loaded,
     required TResult Function(String message) error,
@@ -710,6 +771,7 @@ class _$PokemonListErrorImpl implements PokemonListError {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult? Function(String message)? error,
@@ -727,6 +789,7 @@ class _$PokemonListErrorImpl implements PokemonListError {
       int totalCount,
       bool hasMore,
       bool isLoadingMore,
+      PokemonTypeBasic? selectedType,
     )?
     loaded,
     TResult Function(String message)? error,

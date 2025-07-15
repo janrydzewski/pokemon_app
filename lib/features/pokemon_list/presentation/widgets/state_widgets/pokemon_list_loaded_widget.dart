@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../theme/theme.dart';
 import '../../../data/pokemon_models.dart';
+import '../../../data/pokemon_type_models.dart';
 import '../pokemon_card.dart';
 import '../pokemon_loading_card.dart';
 
@@ -17,6 +18,7 @@ class PokemonListLoadedWidget extends StatelessWidget {
   final void Function(Pokemon) onPokemonTap;
   final VoidCallback onFilterTap;
   final Future<void> Function() onRefresh;
+  final PokemonTypeBasic? selectedType;
 
   const PokemonListLoadedWidget({
     required this.pokemonList,
@@ -28,6 +30,7 @@ class PokemonListLoadedWidget extends StatelessWidget {
     required this.onPokemonTap,
     required this.onFilterTap,
     required this.onRefresh,
+    this.selectedType,
     super.key,
   });
 
@@ -46,6 +49,7 @@ class PokemonListLoadedWidget extends StatelessWidget {
             child: _StatusHeader(
               pokemonCount: totalCount,
               onFilterTap: onFilterTap,
+              selectedType: selectedType,
             ),
           ),
 
@@ -69,8 +73,13 @@ class PokemonListLoadedWidget extends StatelessWidget {
 class _StatusHeader extends StatelessWidget {
   final int pokemonCount;
   final VoidCallback onFilterTap;
+  final PokemonTypeBasic? selectedType;
 
-  const _StatusHeader({required this.pokemonCount, required this.onFilterTap});
+  const _StatusHeader({
+    required this.pokemonCount,
+    required this.onFilterTap,
+    this.selectedType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +106,7 @@ class _StatusHeader extends StatelessWidget {
             const SizedBox(width: 8),
 
             // Status text
-            const _StatusText(),
+            _StatusText(selectedType: selectedType),
             const Spacer(),
 
             // Pokemon count
@@ -133,12 +142,16 @@ class _OnlineIndicator extends StatelessWidget {
 
 /// Online status text
 class _StatusText extends StatelessWidget {
-  const _StatusText();
+  final PokemonTypeBasic? selectedType;
+
+  const _StatusText({this.selectedType});
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      'POKÉDEX ONLINE',
+      selectedType != null
+          ? 'FILTER: ${PokemonTypes.getTypeDisplayName(selectedType!.name)}'
+          : 'POKÉDEX ONLINE',
       style: TextStyle(
         color: AppColors.brightGreen,
         fontSize: 12,
