@@ -5,6 +5,7 @@ import '../../../core/constants/pagination_constants.dart';
 import '../domain/pokemon_repository.dart';
 import 'pokemon_data_source.dart';
 import 'pokemon_models.dart';
+import 'pokemon_type_models.dart';
 
 class PokemonRepositoryImpl implements PokemonRepository {
   final PokemonDataSource _dataSource;
@@ -102,5 +103,19 @@ class PokemonRepositoryImpl implements PokemonRepository {
     // For now, just delegate to data source
     // TODO: Add caching for Pokemon details in next iteration
     return await _dataSource.getPokemonDetails(nameOrId);
+  }
+
+  @override
+  Future<PokemonTypeListResponse> getPokemonTypes() async {
+    // For now, just delegate to data source
+    // Could cache this as it rarely changes
+    return await _dataSource.getPokemonTypes();
+  }
+
+  @override
+  Future<PokemonTypeDetails> getPokemonsByType(String typeNameOrId) async {
+    // For now, just delegate to data source
+    // TODO: Add caching for type details in next iteration
+    return await _dataSource.getPokemonsByType(typeNameOrId);
   }
 }

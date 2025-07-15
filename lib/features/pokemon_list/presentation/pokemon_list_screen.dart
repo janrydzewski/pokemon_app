@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/di/service_locator.dart';
 import '../../../theme/theme.dart';
 import '../data/pokemon_models.dart';
+import '../data/pokemon_type_models.dart';
 import 'pokemon_list_cubit.dart';
 import 'widgets/components/pokedex_shell.dart';
 import 'widgets/state_widgets/pokemon_list_error_widget.dart';
 import 'widgets/state_widgets/pokemon_list_initial_widget.dart';
 import 'widgets/state_widgets/pokemon_list_loaded_widget.dart';
 import 'widgets/state_widgets/pokemon_list_loading_widget.dart';
+import 'widgets/type_filter_modal.dart';
 
 /// Modern Pokemon List Screen
 /// Uses clean architecture with separated state widgets for better maintainability
@@ -79,12 +81,26 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
     );
   }
 
-  /// Handles filter button tap - placeholder for filter functionality
+  /// Handles filter button tap - opens type filter modal
   void _onFilterTap() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Filter feature coming soon!'),
-        backgroundColor: AppColors.brightGreen,
+    final currentState = _cubit.state;
+    PokemonTypeBasic? currentSelectedType;
+
+    if (currentState is PokemonListLoaded) {
+      currentSelectedType = currentState.selectedType;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) => TypeFilterModal(
+        selectedType: currentSelectedType,
+        onTypeSelected: (type) {
+          if (type != null) {
+            _cubit.loadPokemonByType(type);
+          } else {
+            _cubit.clearFilter();
+          }
+        },
       ),
     );
   }
@@ -100,8 +116,14 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
               onStartPressed: () => _cubit.loadPokemonList(),
             ),
             loading: () => const PokemonListLoadingWidget(),
-            loaded: (pokemonList, totalCount, hasMore, isLoadingMore) =>
-                PokemonListLoadedWidget(
+            loaded:
+                (
+                  pokemonList,
+                  totalCount,
+                  hasMore,
+                  isLoadingMore,
+                  selectedType,
+                ) => PokemonListLoadedWidget(
                   pokemonList: pokemonList,
                   totalCount: totalCount,
                   hasMore: hasMore,
@@ -110,6 +132,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                   getPokemonImageUrl: _getPokemonImageUrl,
                   onPokemonTap: _onPokemonTap,
                   onFilterTap: _onFilterTap,
+                  selectedType: selectedType,
                   onRefresh: () async {
                     await _cubit.refreshPokemonList();
                   },
