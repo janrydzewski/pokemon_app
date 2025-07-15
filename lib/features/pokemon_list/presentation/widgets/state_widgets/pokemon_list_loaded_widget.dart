@@ -44,7 +44,7 @@ class PokemonListLoadedWidget extends StatelessWidget {
           // Status header
           SliverToBoxAdapter(
             child: _StatusHeader(
-              pokemonCount: pokemonList.length,
+              pokemonCount: totalCount,
               onFilterTap: onFilterTap,
             ),
           ),

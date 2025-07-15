@@ -122,6 +122,8 @@ class PokemonCard extends StatelessWidget {
                       // Pokemon image area
                       Expanded(
                         child: Container(
+                          width: 65,
+                          height: 100,
                           decoration: BoxDecoration(
                             color: AppColors.contrastCardBackground,
                             borderRadius: BorderRadius.circular(4),
@@ -130,71 +132,51 @@ class PokemonCard extends StatelessWidget {
                               width: 2,
                             ),
                           ),
-                          child: Hero(
-                            tag: 'pokemon_${pokemon.name}',
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
                             child: CachedNetworkImage(
                               imageUrl: imageUrl,
                               fit: BoxFit.contain,
-                              placeholder: (context, url) => Container(
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: CircularProgressIndicator(
-                                          color: AppColors.brightGreen,
-                                          strokeWidth: 2,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Container(
-                                        width: 20,
-                                        height: 2,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.brightGreen,
-                                          borderRadius: BorderRadius.circular(
-                                            1,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                              alignment: Alignment.centerLeft,
+                              placeholder: (context, url) => Center(
+                                child: SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.brightGreen,
+                                    strokeWidth: 2,
                                   ),
                                 ),
                               ),
-                              errorWidget: (context, url, error) => Container(
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.brightGreen,
-                                          borderRadius: BorderRadius.circular(
-                                            3,
-                                          ),
-                                        ),
-                                        child: Icon(
-                                          Icons.catching_pokemon,
-                                          size: 12,
-                                          color: Colors.black,
-                                        ),
+
+                              errorWidget: (context, url, error) => Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.brightGreen,
+                                        borderRadius: BorderRadius.circular(3),
                                       ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        'NO DATA',
-                                        style: TextStyle(
-                                          color: AppColors.brightGreen,
-                                          fontSize: 6,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'monospace',
-                                        ),
+                                      child: Icon(
+                                        Icons.catching_pokemon,
+                                        size: 12,
+                                        color: Colors.black,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'NO DATA',
+                                      style: TextStyle(
+                                        color: AppColors.brightGreen,
+                                        fontSize: 6,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'monospace',
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
