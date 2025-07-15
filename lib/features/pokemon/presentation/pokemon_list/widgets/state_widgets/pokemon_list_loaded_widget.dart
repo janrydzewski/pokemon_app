@@ -150,8 +150,8 @@ class _StatusText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       selectedType != null
-          ? 'FILTER: ${PokemonTypes.getTypeDisplayName(selectedType!.name)}'
-          : 'POKÉDEX ONLINE',
+          ? PokemonTypes.getTypeDisplayName(selectedType!.name)
+          : 'ONLINE',
       style: TextStyle(
         color: AppColors.brightGreen,
         fontSize: 10,

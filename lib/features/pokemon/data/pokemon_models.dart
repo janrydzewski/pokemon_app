@@ -61,13 +61,22 @@ class TypeInfo with _$TypeInfo {
 @freezed
 class PokemonStat with _$PokemonStat {
   const factory PokemonStat({
-    @JsonKey(name: 'base_stat') required int baseStat,
+    required int baseStat,
     required int effort,
     required StatInfo stat,
   }) = _PokemonStat;
 
-  factory PokemonStat.fromJson(Map<String, dynamic> json) =>
-      _$PokemonStatFromJson(json);
+  factory PokemonStat.fromJson(Map<String, dynamic> json) => PokemonStat(
+    baseStat: json['base_stat'] as int,
+    effort: json['effort'] as int,
+    stat: StatInfo.fromJson(json['stat'] as Map<String, dynamic>),
+  );
+
+  Map<String, dynamic> toJson() => {
+    'base_stat': baseStat,
+    'effort': effort,
+    'stat': stat.toJson(),
+  };
 }
 
 @freezed
@@ -82,33 +91,57 @@ class StatInfo with _$StatInfo {
 @freezed
 class PokemonSprites with _$PokemonSprites {
   const factory PokemonSprites({
-    @JsonKey(name: 'front_default') String? frontDefault,
-    @JsonKey(name: 'front_shiny') String? frontShiny,
-    @JsonKey(name: 'back_default') String? backDefault,
-    @JsonKey(name: 'back_shiny') String? backShiny,
+    String? frontDefault,
+    String? frontShiny,
+    String? backDefault,
+    String? backShiny,
     PokemonSpritesOther? other,
   }) = _PokemonSprites;
 
-  factory PokemonSprites.fromJson(Map<String, dynamic> json) =>
-      _$PokemonSpritesFromJson(json);
+  factory PokemonSprites.fromJson(Map<String, dynamic> json) => PokemonSprites(
+    frontDefault: json['front_default'] as String?,
+    frontShiny: json['front_shiny'] as String?,
+    backDefault: json['back_default'] as String?,
+    backShiny: json['back_shiny'] as String?,
+    other: json['other'] != null
+        ? PokemonSpritesOther.fromJson(json['other'] as Map<String, dynamic>)
+        : null,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'front_default': frontDefault,
+    'front_shiny': frontShiny,
+    'back_default': backDefault,
+    'back_shiny': backShiny,
+    'other': other?.toJson(),
+  };
 }
 
 @freezed
 class PokemonSpritesOther with _$PokemonSpritesOther {
-  const factory PokemonSpritesOther({
-    @JsonKey(name: 'official-artwork') OfficialArtwork? officialArtwork,
-  }) = _PokemonSpritesOther;
+  const factory PokemonSpritesOther({OfficialArtwork? officialArtwork}) =
+      _PokemonSpritesOther;
 
   factory PokemonSpritesOther.fromJson(Map<String, dynamic> json) =>
-      _$PokemonSpritesOtherFromJson(json);
+      PokemonSpritesOther(
+        officialArtwork: json['official-artwork'] != null
+            ? OfficialArtwork.fromJson(
+                json['official-artwork'] as Map<String, dynamic>,
+              )
+            : null,
+      );
+
+  Map<String, dynamic> toJson() => {
+    'official-artwork': officialArtwork?.toJson(),
+  };
 }
 
 @freezed
 class OfficialArtwork with _$OfficialArtwork {
-  const factory OfficialArtwork({
-    @JsonKey(name: 'front_default') String? frontDefault,
-  }) = _OfficialArtwork;
+  const factory OfficialArtwork({String? frontDefault}) = _OfficialArtwork;
 
   factory OfficialArtwork.fromJson(Map<String, dynamic> json) =>
-      _$OfficialArtworkFromJson(json);
+      OfficialArtwork(frontDefault: json['front_default'] as String?);
+
+  Map<String, dynamic> toJson() => {'front_default': frontDefault};
 }
