@@ -25,237 +25,247 @@ class PokemonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: AppColors.pokedexSilver,
-        border: Border.all(color: Colors.black.withOpacity(0.8), width: 3),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.6),
-            blurRadius: 10,
-            offset: const Offset(3, 3),
+    return RepaintBoundary(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: AppColors.pokedexSilver,
+          border: Border.all(
+            color: Colors.black.withValues(alpha: 0.8),
+            width: 3,
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(6),
-          onTap: onTap,
-          child: Container(
-            margin: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: AppColors.highContrastDark,
-              border: Border.all(color: AppColors.brightGreen, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.6),
+              blurRadius: 10,
+              offset: const Offset(3, 3),
             ),
-            child: Stack(
-              children: [
-                // Scanlines effect
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: List.generate(25, (index) {
-                          return index.isEven
-                              ? Colors.transparent
-                              : Colors.black.withOpacity(0.1);
-                        }),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(6),
+            onTap: onTap,
+            child: Container(
+              margin: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: AppColors.highContrastDark,
+                border: Border.all(color: AppColors.brightGreen, width: 1),
+              ),
+              child: Stack(
+                children: [
+                  // Scanlines effect
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: List.generate(25, (index) {
+                            return index.isEven
+                                ? Colors.transparent
+                                : Colors.black.withValues(alpha: 0.1);
+                          }),
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                // Card content
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Top row with ID and status
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
+                  // Card content
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Top row with ID and status
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.brightGreen,
+                                borderRadius: BorderRadius.circular(3),
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                _pokemonId,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'monospace',
+                                ),
+                              ),
                             ),
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: AppColors.brightGreen,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.brightGreen,
+                                    blurRadius: 6,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Pokemon image area
+                        Expanded(
+                          child: Container(
+                            width: 65,
+                            height: 100,
                             decoration: BoxDecoration(
-                              color: AppColors.brightGreen,
-                              borderRadius: BorderRadius.circular(3),
-                              border: Border.all(color: Colors.black, width: 1),
+                              color: AppColors.contrastCardBackground,
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: AppColors.brightGreen,
+                                width: 2,
+                              ),
                             ),
-                            child: Text(
-                              _pokemonId,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 8,
-                                fontWeight: FontWeight.w900,
-                                fontFamily: 'monospace',
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.contain,
+                                alignment: Alignment.centerLeft,
+                                placeholder: (context, url) => Center(
+                                  child: SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      color: AppColors.brightGreen,
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                ),
+
+                                errorWidget: (context, url, error) => Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.brightGreen,
+                                          borderRadius: BorderRadius.circular(
+                                            3,
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          Icons.catching_pokemon,
+                                          size: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'NO DATA',
+                                        style: TextStyle(
+                                          color: AppColors.brightGreen,
+                                          fontSize: 6,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'monospace',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                          Container(
-                            width: 6,
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color: AppColors.brightGreen,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.brightGreen,
-                                  blurRadius: 6,
-                                ),
-                              ],
-                            ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Bottom name panel
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 4,
                           ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      // Pokemon image area
-                      Expanded(
-                        child: Container(
-                          width: 65,
-                          height: 100,
                           decoration: BoxDecoration(
                             color: AppColors.contrastCardBackground,
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(3),
                             border: Border.all(
                               color: AppColors.brightGreen,
                               width: 2,
                             ),
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              fit: BoxFit.contain,
-                              alignment: Alignment.centerLeft,
-                              placeholder: (context, url) => Center(
-                                child: SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    color: AppColors.brightGreen,
-                                    strokeWidth: 2,
-                                  ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                pokemon.name
+                                    .split(' ')
+                                    .map(
+                                      (word) =>
+                                          word[0].toUpperCase() +
+                                          word.substring(1),
+                                    )
+                                    .join(' ')
+                                    .toUpperCase(),
+                                style: TextStyle(
+                                  color: AppColors.brightGreen,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'monospace',
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-
-                              errorWidget: (context, url, error) => Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 20,
-                                      height: 20,
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                      height: 2,
                                       decoration: BoxDecoration(
                                         color: AppColors.brightGreen,
-                                        borderRadius: BorderRadius.circular(3),
-                                      ),
-                                      child: Icon(
-                                        Icons.catching_pokemon,
-                                        size: 12,
-                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(1),
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'NO DATA',
-                                      style: TextStyle(
-                                        color: AppColors.brightGreen,
-                                        fontSize: 6,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'monospace',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      // Bottom name panel
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.contrastCardBackground,
-                          borderRadius: BorderRadius.circular(3),
-                          border: Border.all(
-                            color: AppColors.brightGreen,
-                            width: 2,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              pokemon.name
-                                  .split(' ')
-                                  .map(
-                                    (word) =>
-                                        word[0].toUpperCase() +
-                                        word.substring(1),
-                                  )
-                                  .join(' ')
-                                  .toUpperCase(),
-                              style: TextStyle(
-                                color: AppColors.brightGreen,
-                                fontSize: 9,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'monospace',
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 2),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    height: 2,
-                                    decoration: BoxDecoration(
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'RDY',
+                                    style: TextStyle(
                                       color: AppColors.brightGreen,
-                                      borderRadius: BorderRadius.circular(1),
+                                      fontSize: 6,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'monospace',
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'RDY',
-                                  style: TextStyle(
-                                    color: AppColors.brightGreen,
-                                    fontSize: 6,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'monospace',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
