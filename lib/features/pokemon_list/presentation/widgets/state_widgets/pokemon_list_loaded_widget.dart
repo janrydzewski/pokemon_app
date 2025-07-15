@@ -154,7 +154,7 @@ class _StatusText extends StatelessWidget {
           : 'POKÉDEX ONLINE',
       style: TextStyle(
         color: AppColors.brightGreen,
-        fontSize: 12,
+        fontSize: 10,
         fontWeight: FontWeight.w700,
         letterSpacing: 1,
         fontFamily: 'monospace',
