@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pokemon_app/core/utils/context_extensions.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../theme/theme.dart';
 import '../data/pokemon_models.dart';
 import 'pokemon_list_cubit.dart';
-import 'widgets/pokemon_grid.dart';
+import 'widgets/pokemon_card.dart';
+import 'widgets/pokemon_loading_card.dart';
 
 class PokemonListScreen extends StatefulWidget {
   const PokemonListScreen({super.key});
@@ -71,104 +73,51 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [const Color(0xFFF8F9FA), const Color(0xFFE9ECEF)],
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [const Color(0xFFF8F9FA), const Color(0xFFE9ECEF)],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Modern Header
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Pokédex',
-                              style: textTheme.headlineMedium?.copyWith(
-                                color: const Color(0xFF2D3748),
-                                fontWeight: FontWeight.w800,
-                                fontSize: 32,
-                              ),
-                            ),
-                            Text(
-                              'Discover amazing creatures',
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: const Color(0xFF718096),
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                AppColors.seed,
-                                AppColors.seed.withOpacity(0.8),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.seed.withOpacity(0.3),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.catching_pokemon,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              // Main content area
-              Expanded(
-                child: BlocBuilder<PokemonListCubit, PokemonListState>(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await _cubit.refreshPokemonList();
+            },
+            backgroundColor: Colors.white,
+            child: CustomScrollView(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                // Main content area
+                BlocBuilder<PokemonListCubit, PokemonListState>(
                   bloc: _cubit,
                   builder: (context, state) {
                     return state.when(
-                      initial: () => _buildInitialState(),
-                      loading: () => _buildLoadingState(),
+                      initial: () =>
+                          SliverFillRemaining(child: _buildInitialState()),
+                      loading: () =>
+                          SliverFillRemaining(child: _buildLoadingState()),
                       loaded:
                           (pokemonList, totalCount, hasMore, isLoadingMore) =>
-                              _buildLoadedState(
+                              _buildLoadedSlivers(
                                 pokemonList,
                                 hasMore,
                                 isLoadingMore,
                                 totalCount,
                               ),
-                      error: (message) => _buildErrorState(message),
+                      error: (message) =>
+                          SliverFillRemaining(child: _buildErrorState(message)),
                     );
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -299,102 +248,111 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
     );
   }
 
-  Widget _buildLoadedState(
+  Widget _buildLoadedSlivers(
     List<Pokemon> pokemonList,
     bool hasMore,
     bool isLoadingMore,
     int totalCount,
   ) {
-    return Column(
-      children: [
-        // Stats header
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 2),
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverAppBar.medium(
+          expandedHeight: 110,
+          backgroundColor: Colors.white,
+          title: Row(
+            children: [
+              Expanded(
+                child: Text('$totalCount Pokémon', style: context.titleLarge),
               ),
+              IconButton.filled(onPressed: () {}, icon: Icon(Icons.menu)),
             ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '$totalCount',
-                    style: TextStyle(
-                      color: const Color(0xFF2D3748),
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(top: 8, left: 4, right: 4),
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.white, Colors.blue.shade50],
                     ),
                   ),
-                  Text(
-                    'Pokémon found',
-                    style: TextStyle(
-                      color: const Color(0xFF718096),
-                      fontSize: 14,
-                    ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.catching_pokemon,
+                        size: 48,
+                        color: Colors.blue,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Pokédex',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue.shade800,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Discover and catch them all!',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton.filled(
+                        onPressed: () {},
+                        icon: Icon(Icons.menu),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Online',
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
-        // Pokemon grid
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              await _cubit.refreshPokemonList();
-            },
-            color: AppColors.seed,
-            backgroundColor: Colors.white,
-            child: PokemonGrid(
-              pokemonList: pokemonList,
-              isLoadingMore: isLoadingMore,
-              scrollController: _scrollController,
-              getPokemonImageUrl: _getPokemonImageUrl,
-              onPokemonTap: _onPokemonTap,
+
+        // Pokemon grid sliver
+        SliverPadding(
+          padding: const EdgeInsets.all(12),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1.2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
             ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              if (index >= pokemonList.length) {
+                // Loading cards at the bottom
+                return const PokemonLoadingCard();
+              }
+
+              final pokemon = pokemonList[index];
+              return PokemonCard(
+                pokemon: pokemon,
+                imageUrl: _getPokemonImageUrl(pokemon.url),
+                onTap: () => _onPokemonTap(pokemon),
+              );
+            }, childCount: pokemonList.length + (isLoadingMore ? 2 : 0)),
           ),
         ),
       ],

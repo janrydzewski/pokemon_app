@@ -66,7 +66,6 @@ final ThemeData lightTheme = ThemeData(
     ),
   ),
   appBarTheme: AppBarTheme(
-    backgroundColor: AppColors.seed,
     foregroundColor: Colors.white,
     elevation: 2,
     centerTitle: true,

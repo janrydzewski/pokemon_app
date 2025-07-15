@@ -98,103 +98,89 @@ class PokemonCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Content
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header with name and ID
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              pokemon.name
-                                  .split(' ')
-                                  .map(
-                                    (word) =>
-                                        word[0].toUpperCase() +
-                                        word.substring(1),
-                                  )
-                                  .join(' '),
-                              style: textTheme.titleLarge?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Text(
-                            _pokemonId,
-                            style: textTheme.titleMedium?.copyWith(
-                              color: Colors.white.withOpacity(0.8),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      // Pokemon image
-                      Expanded(
+                Positioned(
+                  bottom: 5,
+                  right: 5,
+                  child: Hero(
+                    tag: 'pokemon_${pokemon.name}',
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      width: 110,
+                      height: 110,
+                      placeholder: (context, url) => Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         child: Center(
-                          child: Hero(
-                            tag: 'pokemon_${pokemon.name}',
-                            child: CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              width: 100,
-                              height: 100,
-                              placeholder: (context, url) => Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.catching_pokemon,
-                                      size: 40,
-                                      color: Colors.white.withOpacity(0.8),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'No Image',
-                                      style: TextStyle(
-                                        color: Colors.white.withOpacity(0.8),
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              fit: BoxFit.contain,
-                            ),
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      const SizedBox(height: 32),
+                      errorWidget: (context, url, error) => Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.catching_pokemon,
+                              size: 40,
+                              color: Colors.white.withOpacity(0.8),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'No Image',
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        pokemon.name
+                            .split(' ')
+                            .map(
+                              (word) =>
+                                  word[0].toUpperCase() + word.substring(1),
+                            )
+                            .join(' '),
+                        style: textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        _pokemonId,
+                        style: textTheme.titleMedium?.copyWith(
+                          color: Colors.white.withOpacity(0.8),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
                     ],
                   ),
                 ),
